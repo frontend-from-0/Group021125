@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- Css in HTML -->
+    <style>
+      /* body - CSS selector that selects body element */
+      body {
+        background-color: #f1f5f9;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header, main, and footer are sibling elements. Body is parent element for header, main and footer. -->
+    <header>
+      <!-- Semantic element. Header is parent element for nav. Ul is the first child of the nav element. -->
+      <nav>
+        <!-- li should always be the first child of ul or ol list elements -->
+        <ul>
+          <li><a href="#" class="active">Home</a></li>
+          <li><a href="./about.html">About</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Landmark element (main, header, footer)-->
+    <main style="text-align: center">
+      <h1>Home</h1>
+      <div class="w-prose">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
+          aspernatur molestias quae id accusantium, commodi ad fugit iure nihil,
+          eius quaerat? Vitae libero ipsum similique vero repudiandae neque
+          cupiditate eveniet.
+        </p>
+        <p class="text-secondary">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere
+          consequuntur nostrum hic ut labore aliquid aspernatur asperiores
+          fugiat distinctio corrupti soluta, excepturi amet dolor ad dolore
+          harum natus voluptatibus. Commodi.
+        </p>
+        <span>Short description</span>
+      </div>
+      <!-- TODO -->
+      <a href="https://google.com" target="_blank">Google.com</a>
+    </main>
+
+    <!-- Inline CSS (inline styles) - DO NOT USE -->
+    <footer style="text-align: center">
+      <address>Kungsgatan 20, 12002. Gothenburg.</address>
+      <div>
+        <a href="mailto:name@domain.com" class="contact-link">
+          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <span>name@domain.com</span>
+        </a>
+      </div>
+      <div>
+        <a href="tel:+460731234567" class="contact-link">
+          <i class="fa fa-phone" aria-hidden="true"></i>
+          <span>+460731234567</span>
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>

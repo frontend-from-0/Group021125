@@ -1,0 +1,85 @@
+/* External CSS file */
+body {
+  background-color: #f1f5f9;
+  font-family: sans-serif;
+  margin: 0;
+}
+
+h1 {
+  font-weight: 900;
+}
+
+
+p {
+  color: #1e293b;
+  /* 16px = 1em */
+  font-size: 16px;
+  line-height: 150%;
+  text-align: left;
+}
+
+span {
+  font-size: 14px;
+  font-weight: 100;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+nav {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+/* :hover - pseudo selector */
+nav > ul > li > a:hover {
+  color: #64748b;
+}
+
+ul {
+  /* Margin - space outside element */
+  margin: 0;
+
+  /* Padding - space inside element */
+  padding: 20px;
+  list-style-type: none;
+
+  /* Flexbox styles below */
+  display: flex;
+  gap: 20px;
+}
+
+/* Class selector starts with a . followed by class name */
+
+.w-prose {
+  max-width: 600px;
+  background-color: #cbd5e1;
+  /* 0 - top & bottom; auto - left and right */
+  margin: 0 auto;
+
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+
+.active {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.contact-link {
+  margin: 20px 14px;
+  display: inline-block;
+  color: #312e81;
+  
+}
+
+.contact-link > span {
+  font-weight: 700;
+}
+
+
+.text-secondary {
+  color: #525252;
+}
