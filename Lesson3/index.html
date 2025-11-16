@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Registration form example</h1>
+
+      <!-- YOu can only use GET or POST methods as value of the method attibute. -->
+      <form action="" method="GET">
+        <div class="input-group">
+          <label for="full_name" class="full-width">Full name</label>
+          <!-- type attribute, text - value -->
+          <input
+            type="text"
+            id="full_name"
+            name="fullName"
+            class="full-width"
+          />
+        </div>
+        <div class="input-group">
+          <label for="mail_address" class="full-width">Mail Address</label>
+          <input
+            placeholder="name@company.com"
+            type="email"
+            id="mail_address"
+            name="mailAddress"
+            class="full-width"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="datetime" class="full-width"
+            >Desired apointment time</label
+          >
+          <input
+            type="datetime-local"
+            id="datetime"
+            name="apointmentTime"
+            class="full-width"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="tel" class="full-width">Mobile Phone Number</label>
+          <!-- <select name="" id="" aria-label="country code label">
+            <option value="SE">+46</option>
+            <option value="TR">+90</option>
+          </select> -->
+          <input
+            type="tel"
+            id="tel"
+            name="mobilePhone"
+            class="full-width"
+            pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
+            placeholder="123 456 7890"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="pass" class="full-width"
+            >Please enter a password (minimum 8 characters):</label
+          >
+          <input
+            type="password"
+            id="pass"
+            name="password"
+            minlength="8"
+            required
+            class="full-width"
+          />
+        </div>
+        <div class="input-group">
+          <label for="color">Select your fav color </label>
+          <input type="color" id="color" name="favColor" required />
+        </div>
+        <fieldset class="input-group">
+          <legend>Cinsiyet</legend>
+
+          <input type="radio" id="erkek" name="cinsiyet" />
+          <label for="erkek">Erkek</label>
+          <input type="radio" id="kadin" name="cinsiyet" />
+          <label for="kadin">Kadın</label>
+        </fieldset>
+
+        <div class="input-group">
+          <label for="country" class="full-width"
+            >Please select your country
+          </label>
+          <select id="country" name="country" class="full-width">
+            <option value="" selected>Select your Country</option>
+            <option value="RU">Russia Federation</option>
+            <option value="TR">Turkey</option>
+          </select>
+        </div>
+
+        <fieldset class="input-group">
+          <div>
+            <input type="checkbox" id="privacy" name="privacy" />
+            <label for="privacy"
+              >I read and accepted the
+              <a href="privacy-policy.html" target="_blank"
+                >privacy policy</a
+              ></label
+            >
+          </div>
+          <div>
+            <input type="checkbox" id="cookiePolicy" name="cookiePolicy" />
+            <label for="cookiePolicy"
+              >I read and accepted the cookie policy</label
+            >
+          </div>
+        </fieldset>
+
+
+        <!-- Use button if you need to add another html element (or any time).
+        Use input type submit only if you add text as button label.
+        -->
+        <!-- <button type="submit">Submit</button> -->
+        <input type="submit" value="Send registration form">
+        <button type="reset">Clear form</button>
+      </form>
+    </main>
+  </body>
+</html>
