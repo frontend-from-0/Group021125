@@ -1,0 +1,43 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin:0;
+}
+
+ul {
+  margin: 0;
+  padding-left: 0;
+}
+
+
+
+nav {
+  background-color: blue;
+  padding: 10px;
+  /* margin: 20px 40px 30px 50px; */
+
+  /* top - bottom - sides */
+  /* margin: 20px 40px 20px; */
+
+  /* top&bottom - sides */
+  /* margin: 100px 200px; */
+
+}
+
+li {
+  display: inline-block;
+  margin-right: 30px;
+}
+
+a {
+  color: white;
+}
+
+main {
+  max-width: 1000px;
+  background-color: beige;
+  height: 800px;
+  margin: 0 auto;
+}
