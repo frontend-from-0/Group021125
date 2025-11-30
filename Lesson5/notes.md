@@ -3,7 +3,7 @@
 
 * HEX & HEXA (#RRGGBB & #RRGGBBAA) - #000 #000000 both are black color (mostly used in frontend development)
 
-* RGB - rgb(0,0,0)
+* RGB - rgb(0,230,0)
 * RGBA - rgba(0,0,0,0.4) the last number is for opacity (transparency)
 
 * HSL & HSLA (HUE - SATURATION - LIGHTNESS)
@@ -90,14 +90,13 @@ We don't really use units below:
 * `ch` – Relative to the width of the "0" character in the current font
 
 ### Viewport-relative units
-
+* `%` – Relative to the size of the parent element
 * `vw` – 1% of the viewport’s width
 * `vh` – 1% of the viewport’s height
 * `vmin` – 1% of the smaller dimension (width or height)
 * `vmax` – 1% of the larger dimension (width or height)
 
 Relative units are best for responsive design and accessibility.
-
 
 
 # Fonts
