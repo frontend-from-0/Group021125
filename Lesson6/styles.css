@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Lato, sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+header {
+  background-color: #fbfbfd;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1110px;
+  margin: auto;
+  font-family: Roboto, sans-serif;
+  /* padding:16px; */
+  height: 60px;
+}
+.nav__list {
+  display: flex;
+  gap: 50px;
+  list-style-type: none;
+}
+.nav__link {
+  color: #929ecc;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+/* TODO: add hover state for .nav__link */
+
+.logo {
+  color: #2245e3;
+  font-feature-settings: 'liga' off, 'clig' off;
+
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 38px;
+}
+
+/* TODO: Hover state */
+.btn--primary {
+  font-size: 12px;
+  background-color: #111b47;
+  font-weight: 500;
+  line-height: 18px;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 2px;
+}
+.btn--primary:hover {
+  background-color: rgba(17, 27, 71, 0.9);
+}
+
+main {
+  max-width: 1312px;
+  margin: auto;
+}
+
+.hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 132px;
+  margin-bottom: 118px;
+  gap:80px;
+}
+
+.flex-row {
+  display: flex;
+  gap: 40px;
+}
+.info__container {
+  display: flex;
+  flex-direction: column;
+  gap: 78px;
+}
+.info-card {
+  display: flex;
+  gap: 32px;
+}
+
