@@ -1,12 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="./styles.css">
-</head>
-<body>
-  
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link
+      rel="stylesheet"
+      href="./md.css"
+      media="(min-width:768px) and (max-width: 1023.98px)"
+    />
+    <link rel="stylesheet" href="./lg.css" media="(min-width:1024px)" />
+  </head>
+  <body>
+    <nav>
+      <a class="nav__hamburger" href="/"
+        ><img src="./assets/icons/hamburger.svg" alt=""
+      /></a>
+      <a href="/"><img src="./assets/logo.svg" alt="Travlog Logo" /></a>
+      <ul class="nav__links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/">Discover</a></li>
+        <li><a href="/">Special Deals</a></li>
+        <li><a href="/">Contact</a></li>
+      </ul>
+      <div class="nav__ctas">
+        <a href="/">Log In</a>
+        <a href="">Sign Up</a>
+      </div>
+    </nav>
+    <main>
+      <section class="hero ">
+        <div class="hero__content">
+          <div class="chip text--accent">
+            <span>Explore the world!</span>
+            <img src="./assets/icons/briefcase.svg" class="icon"/>
+          </div>
+          <h1>
+            Travel <span class="text--accent">top destination</span> of the world
+          </h1>
+          <p>
+            We always make our customer happy by providing as many choices as
+            possible
+          </p>
+          <div class="hero__ctas">
+            <a href="/">Get Started</a>
+            <button type="button">Watch Demo</button>
+          </div>
+        </div>
+        <div>
+          <picture>
+            <source srcset="./assets/hero-md.webp" media="(min-width: 768px)" />
+            <source
+              srcset="./assets/hero-sm.webp"
+              media="(max-width:767.98px)"
+            />
+            <img
+              src="./assets/hero-md.png"
+              alt="travel collage"
+              loading="lazy"
+              decoding="async"
+              width="789px"
+              height="821px"
+            />
+          </picture>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>

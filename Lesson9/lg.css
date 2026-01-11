@@ -1,0 +1,35 @@
+/* @media all and (min-width:1024px){
+  body {
+    background-color: blue;
+  }
+} */
+
+.nav__links {
+  display: flex;
+  gap: 64px;
+}
+
+.nav__ctas {
+  display: flex;
+}
+
+.nav__hamburger {
+  display: none;
+}
+nav {
+  flex-direction: row;
+}
+
+.hero{
+  flex-direction: row;
+  margin: 64px 0px;
+}
+.hero__content {
+  gap:43px;
+}
+
+.hero__ctas {
+  flex-direction: row;
+  gap: 16px;
+  text-align: center;
+}

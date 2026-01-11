@@ -1,12 +1,15 @@
+/* Mobile devices (standard CSS) */
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  padding: 0 16px;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
   padding-left: none;
   margin: 0;
@@ -19,4 +22,55 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+nav {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  max-width: 896px;
+  margin: auto;
+}
+
+.nav__links {
+  display: none;
+}
+
+.nav__ctas {
+  display: none;
+}
+
+main {
+  max-width: 896px;
+  margin: auto;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column-reverse;
+  margin: 32px 0px;
+  min-height: calc(100vh - 112px);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  gap:16px;
+}
+
+.hero__ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: center;
 }

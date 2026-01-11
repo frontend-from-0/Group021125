@@ -1,0 +1,28 @@
+/* @media all and (min-width:768px) and (max-width:1023.98px) {
+  body {
+    background-color: green;
+  }
+} */
+
+body {
+  padding: 0 64px;
+}
+
+.nav__ctas {
+  display: flex;
+}
+nav {
+  flex-direction: row;
+}
+.hero {
+  flex-direction: column-reverse;
+  margin: 64px 0px;
+}
+.hero__content {
+  gap:43px;
+}
+
+.hero__ctas {
+  flex-direction: row;
+  gap: 16px;
+}
