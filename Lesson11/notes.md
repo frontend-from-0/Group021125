@@ -13,7 +13,9 @@ If you do 'git log' in terminal, you need to press 'q' button on the keyboard to
 6. Add / modify files and save them. 
 7. Add the files in the source control tab.
 8. Add a message describing your changes.
-9. Commit OR commit & push OR commit & sync.
+9. Stage changes (click + button next to the files thatwere changed correctly).
+10. Commit OR commit & push OR commit & sync.
+11. Open pull request on Github.
 
 
 If you added changes on a wrong brach, you can use Stash option to:
