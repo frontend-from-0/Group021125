@@ -7,6 +7,18 @@
    - Call the function with different passwords and log the result.
 */
 
+console.log('Ex. 1 --------');
+
+function checkPassword(password) {
+  if (password.length >= 8) {
+    console.log('Password length is sufficient.');
+  } else {
+    console.log('Password is too short.');
+  }
+}
+
+checkPassword('  password 112312   ');
+checkPassword('pas');
 
 /*
 2. Uppercase Name
@@ -14,7 +26,14 @@
    - Log the uppercase result to the console.
    - Example: "John Doe" -> "JOHN DOE"
 */
+function logUppercaseName(name) {
+  const uppercaseName = name.toUpperCase();
+  console.log(uppercaseName);
+}
 
+console.log('Ex. 2 --------');
+logUppercaseName('name');
+logUppercaseName('john');
 
 /*
 3. Lowercase Email
@@ -23,6 +42,8 @@
    - Example: "USER@Example.COM" -> "user@example.com"
 */
 
+console.log('Ex. 3 --------');
+
 /*
 4. Extract Domain
    - Define a function `getDomain(email)` that uses `slice` or `substring` to
@@ -30,7 +51,14 @@
    - Log the domain to the console.
    - Example: "user@example.com" -> "example.com"
 */
+console.log('Ex. 4 --------');
+function getDomain(email) {
+  const emailArray = email.split('@');
+  // user@example.com -> ['user', 'example.com'];
 
+  console.log(emailArray[1]); // second element in the array
+}
+getDomain('mesut.ozdemir@gmail.com');
 
 /*
 5. Check Substring
@@ -40,6 +68,22 @@
    - Else, log: "<word> not found in sentence."
 */
 
+console.log('Ex. 5 --------');
+
+function containsWord(sentence, word) {
+  // if (sentence.toLowerCase().includes(word.toLowerCase())) {
+  if (sentence.includes(word)) {
+    console.log(`${word} found in sentence`);
+  } else {
+    console.log(`${word} not found in sentence`);
+  }
+}
+containsWord(
+  'Define a function `checkFileExtension(filename)` that checks if the filename',
+  'word',
+);
+containsWord('Bugün hava yagmurlu', 'Hava');
+
 /*
 6. File Extension Check
    - Define a function `checkFileExtension(filename)` that checks if the filename
@@ -47,6 +91,19 @@
    - If it does, log: "This is a PDF file."
    - Otherwise, log: "Not a PDF file."
 */
+console.log('Ex. 6 --------');
+
+function checkFileExtension(filename) {
+  if (filename.toLowerCase().endsWith('.pdf')) {
+    // if (filename.toUpperCase().endsWith('.PDF')) {
+    console.log('This is a PDF file.');
+  } else {
+    console.log('Not a PDF file.');
+  }
+}
+checkFileExtension('myfile.pdf');
+checkFileExtension('myfile.PDF');
+checkFileExtension('myfile.exel');
 
 /*
 7. Compare Numbers (if-else)
@@ -95,12 +152,44 @@
      - Log the matched day or "Invalid day" if out of range.
 */
 
+function getDayofWeek(number) {
+  switch (number) {
+    case 1:
+      console.log('Monday');
+      break;
+    case 2:
+      console.log('Tuesday');
+      break;
+    case 3:
+      console.log('Wednesday');
+      break;
+    case 4:
+      console.log('Thursday');
+      break;
+    case 5:
+      console.log('Friday');
+      break;
+    case 6:
+      console.log('Saturday');
+      break;
+    case 7:
+      console.log('Sunday');
+      break;
+    default:
+      console.log('Unknow day');
+      break;
+  }
+}
+getDayofWeek(9);
+getDayofWeek(1);
+getDayofWeek('4');
 
-// value == value
-/// value and type === value and type
+// == value equality (non-strict check); !=
+// === value & type equality (strict check); !==  
+
 
 /*
-13. Repeat a String
+13. Repeat a String;
    - Define a function `repeatWord(word, times)` that uses the .repeat() method
      to repeat `word` `times` times.
    - Log the repeated result.
@@ -162,6 +251,40 @@
      - "green" -> log: "Go"
      - anything else -> "Invalid color"
 */
+function trafficLight(color) {
+  switch (color.toLowerCase()) {
+    case 'red':
+      console.log('stop');
+      break;
+    case 'yellow':
+      console.log('caution');
+      break;
+    case 'green':
+      console.log('go');
+      break;
+    default:
+      console.log('Invalid Color');
+  }
+}
+
+function trafficLightWithIf(color) {
+  if (color.toLowerCase() === 'red') {
+    console.log('stop');
+  } else if (color.toLowerCase() === 'yellow') {
+    console.log('caution');
+  } else if (color.toLowerCase() === 'green') {
+    console.log('go');
+  } else {
+    console.log('Invalid Color');
+  }
+}
+trafficLight('red');
+trafficLight('RED');
+trafficLight('reD');
+
+trafficLight('green');
+trafficLight('orange');
+trafficLight('black');
 
 /*
 21. Check String Length (if-else)
