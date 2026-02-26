@@ -5,6 +5,27 @@
    - Log the final sum.
 */
 
+function sumArray(numbers) {
+  let result = 0;
+  console.log('Finding sum of ', numbers, ' array');
+
+  // if (numbers.length === 0) {
+  //   console.log('Array is empty');
+  //   return;
+  // }
+
+  for (let i = 0; i < numbers.length; i++) {
+    console.log('Current position', i, 'current element', numbers[i]);
+    result = result + numbers[i];
+  }
+
+  console.log('Final sum', result);
+}
+
+sumArray([3, 6, 9, 4]);
+// sumArray([]);
+// sumArray(['asda', 'asads']);
+
 /*
 2. Find Maximum Number in an Array
    - Define a function `findMax(numbers)` that uses a for loop to iterate
@@ -12,12 +33,38 @@
    - Log the largest value.
 */
 
+function findMax(numbers) {
+  let max = numbers[0];
+  for (let i = 1; i < numbers.length; i++) {
+    if (max < numbers[i]) {
+      max = numbers[i];
+    }
+  }
+  console.log('The maximum number of array', numbers, 'is', max);
+}
+
+findMax([4, 9, 50, 10]);
+findMax([4, 9, -50, 10]);
+
 /*
 3. Count Odd and Even Numbers
    - Define a function `countOddEven(numbers)` that loops through an array
      of numbers and counts how many are odd and how many are even.
    - Log the counts in the format: "Odd: X, Even: Y"
 */
+function countOddEven(numbers) {
+  let oddCount = 0;
+  let eventCount = 0;
+  for (i = 0; i < numbers.length; i++) {
+    if (numbers[i] % 2 === 0) {
+      eventCount++;
+    } else {
+      oddCount++;
+    }
+  }
+  console.log('Odd:', oddCount, 'and Even:', eventCount);
+}
+countOddEven([1, 2, 3, 4]);
 
 /*
 4. Sum of Numbers in a Range (While Loop)
@@ -25,6 +72,25 @@
      to sum all integers from `start` to `end` (inclusive).
    - Log the final sum.
 */
+function sumRange(start, end) {
+  let sum = 0;
+  let current = start;
+  if (start <= end) {
+    while (current <= end) {
+      sum += current;
+      current++;
+    }
+  } else {
+    while (current >= end) {
+      sum += current;
+      current--;
+    }
+  }
+
+  console.log('Final Sum:', sum);
+}
+sumRange(5, 3);
+sumRange(1, 3);
 
 /*
 5. Reverse an Array
@@ -32,6 +98,17 @@
      of an array manually using a for loop (without using .reverse()).
    - Log the reversed array.
 */
+function reverseArray(arr) {
+  const reversed = [];
+
+  for (let i = arr.length - 1; i >= 0; i--) {
+    const currentValue = arr[i];
+    reversed.push(currentValue);
+  }
+  console.log('Final reversed array', reversed);
+}
+
+reverseArray([3, 7, 9, 1, 2]);
 
 /*
 6. Filter Out Negative Numbers
@@ -39,7 +116,16 @@
      an array of numbers and creates a new array without any negative values.
    - Log the new array.
 */
-
+function filterNegative(numbers) {
+  let result = [];
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] >= 0) {
+      result.push(numbers[i]);
+    }
+  }
+  console.log('Initial array', numbers, 'Result', result);
+}
+filterNegative([3, -7, 9, -1, 2]);
 /*
 7. Double the Values (For-of Loop)
    - Define a function `doubleValues(numbers)` that uses a for-of loop
@@ -47,11 +133,37 @@
    - Log the new array.
 */
 
+function doubleValues(numbers) {
+  const result = [];
+  for (const number of numbers) {
+    if (typeof number !== 'number'){
+      console.log("Array contains elements other than numbers, please provide correct input.");
+      return;
+    }
+    result.push(number * 2);
+  }
+  console.log('Result is', result);
+}
+doubleValues([1, 4, 6]);
+doubleValues([1, 'asdas', 6]);
+
+
 /*
 8. Print Each Character of a String (For-of)
    - Define a function `printCharacters(str)` that uses a for-of loop
      to log each character in the string on a separate line.
 */
+function printCharacters(str){
+  console.log("printing characters of the string", str);
+ for ( const char of str){
+  console.log(char);
+ }
+}
+printCharacters("Lesson");
+
+['a', 's', 'e'][0]; // 'a'
+
+'ase'[0] // 'a'
 
 /*
 9. Sum All Values in an Object
@@ -182,7 +294,6 @@
       - logs the removed person
       - logs the final queue
 */
-
 
 /*
 26. To-Do List Application 
