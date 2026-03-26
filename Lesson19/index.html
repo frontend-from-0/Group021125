@@ -7,16 +7,15 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <h1 id="mainHeading">DOM (Document Object Model)</h1>
 
-  <h1>DOM (Document Object Model)</h1>
+  <h2 id="secondaryHeading">Methods for finding elements</h2>
 
-  <h2>Methods for finding elements</h2>
-
-  <ol>
-    <li>getElementById - returns an element by its unique ID attribute.</li>
-    <li>getElementsByClassName - returns a collection of elements that have a specific class name.</li>
-    <li>getElementsByTagName - returns a collection of elements with a specific HTML tag name.</li>
-    <li>querySelector - returns the first element that matches a given CSS selector.</li>
+  <ol >
+    <li class="text-secondary">getElementById - returns an element by its unique ID attribute.</li>
+    <li >getElementsByClassName - returns a collection of elements that have a specific class name.</li>
+    <li class="text-secondary">getElementsByTagName - returns a collection of elements with a specific HTML tag name.</li>
+    <li class="text-secondary">querySelector - returns the first element that matches a given CSS selector.</li>
     <li>querySelectorAll - returns a static NodeList(*) of all elements that match a given CSS selector.</li>
     <li>getElementsByName - returns a collection of elements with a specific name attribute (typically used with form elements when an element has "name" atrribute).</li>
     <li>closest - returns the closest ancestor element that matches a given CSS selector. It starts with the element itself and then traverses up the DOM tree.</li>
@@ -27,14 +26,17 @@
 
   <h2>NodeList</h2>
 
-  <p>A NodeList is a collection of DOM elements returned by certain DOM traversal and query methods in JavaScript. It represents a list of nodes (elements) that are linked together in the order they appear in the DOM tree. A NodeList is not an array, although it may resemble one in some ways. It is a "live" collection, meaning it is automatically updated when the DOM changes.</p>
+  <p>A NodeList is a <span>collection</span> of DOM elements returned by certain DOM traversal and query methods in JavaScript. It represents a list of nodes (elements) that are linked together in the order they appear in the DOM tree. A NodeList is not an array, although it may resemble one in some ways. It is a "live" collection, meaning it is automatically updated when the DOM changes.</p>
 
-  <p>Although a NodeList may resemble an array, it does not have all the properties and methods of an array. For example, **you cannot use array methods like push, pop, or forEach directly on a NodeList**.</p>
+  <p>Although a <span>NodeList</span> may resemble an array, it does not have all the properties and methods of an array. For example, **you cannot use array methods like push, pop, or forEach directly on a NodeList**.</p>
+  <p>Although a <span>NodeList</span> may resemble an array, it does not have all the properties and methods of an array. For example, **you cannot use array methods like push, pop, or forEach directly on a NodeList**.</p>
+  <p>Although a <span>NodeList</span> may resemble an array, it does not have all the properties and methods of an array. For example, **you cannot use array methods like push, pop, or forEach directly on a NodeList**.</p>
 
-  <img src="" alt="Document Object Model Representation">
-
-
-  <script src="./script.js"></script>
+  <img  src="" alt="Document Object Model Representation">
   
+  <label>
+  <input type="checkbox" name="accepted-conditions">
+  I accept terms and conditions</label>
+  <script src="./script.js"></script>
 </body>
 </html>

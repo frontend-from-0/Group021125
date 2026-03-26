@@ -1,0 +1,17 @@
+.text-accent {
+  color: red;
+}
+
+
+.text-secondary {
+  color:grey;
+  
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.text-large{
+  font-size: 36px;
+}
