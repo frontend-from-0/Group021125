@@ -93,6 +93,25 @@ fieldset {
   background-color: #005fa3;
 }
 
+#confirm:disabled {
+  background-color: #868b8e;
+}
+
+#confirm:disabled:hover {
+  background-color: #565859;
+}
+
+
+
 .hidden {
   display: none;
+}
+
+.selected {
+  background-color: #0077cc;
+  color: white;
+}
+
+.selected:hover {
+  background-color: #005fa3;
 }
