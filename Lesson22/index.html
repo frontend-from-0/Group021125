@@ -171,11 +171,14 @@
               >
                 Organic Apples
               </p>
-              <p
+              <div
                 class="text-[#974e52] text-sm font-normal leading-normal line-clamp-2"
               >
-                Quantity: <span id="apples_quantity">1</span> 
-              </p>
+                <span>Quantity:<span> 
+                <button id="apples_decrement" class="m-2 px-2 bg-[#f3e7e8] rounded-md">-</button>
+                <span id="apples_quantity">0</span> 
+                <button id="apples_increment" class="m-2 px-2 bg-[#f3e7e8] rounded-md">+</button>
+              </div>
             </div>
           </div>
           <div class="shrink-0">
@@ -205,7 +208,7 @@
               <p
                 class="text-[#974e52] text-sm font-normal leading-normal line-clamp-2"
               >
-                Quantity: <span id="bananas_quantity">2</span>
+                Quantity: <span id="bananas_quantity">0</span>
               </p>
             </div>
           </div>
@@ -236,7 +239,7 @@
               <p
                 class="text-[#974e52] text-sm font-normal leading-normal line-clamp-2"
               >
-                Quantity: <span id="bread_quantity">1</span>
+                Quantity: <span id="bread_quantity">0</span>
               </p>
             </div>
           </div>
@@ -267,7 +270,7 @@
               <p
                 class="text-[#974e52] text-sm font-normal leading-normal line-clamp-2"
               >
-                Quantity: <span id="eggs_quantity">1</span>
+                Quantity: <span id="eggs_quantity">0</span>
               </p>
             </div>
           </div>
@@ -282,11 +285,12 @@
         <p
           class="text-[#974e52] text-sm font-normal leading-normal pb-3 pt-1 px-4"
         >
-          Total Price: $25
+          Total Price: $<span id="total_price">0</span>
         </p>
         <div class="flex px-4 py-3 justify-end">
           <button
             class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f3e7e8] text-[#1b0e0f] text-sm font-bold leading-normal tracking-[0.015em]"
+            id="clear_cart"
           >Clear Cart
           </button>
         </div>
