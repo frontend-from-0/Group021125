@@ -12,3 +12,58 @@ HTTP status codes are three-digit numbers that the server sends in response to a
 400... - Errors (400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found)
 500... - Service error (500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable)
 */
+const container = document.getElementById('container');
+const fetchUsersButton = document.getElementById('fetchUsersButton');
+
+function getUsers() {
+  fetch('https://dummyjson.com/users')
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`An error occurred. Status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      const users = data.users;
+      users.forEach((user) => {
+        // div with class card
+        // h2 with class card-title that will have text 'User: user.id'
+        // p with class card-body that will have text "firstName and lastName"
+
+        const card = document.createElement('div');
+        card.classList.add('card');
+
+        const title = document.createElement('h2');
+        title.classList.add('card-title');
+        title.textContent = `User: ${user.id}`;
+
+        const paragraph = document.createElement('p');
+        paragraph.classList.add('card-body');
+        paragraph.textContent = `${user.firstName} ${user.lastName}, age ${user.age}`;
+
+        const updateButton = document.createElement('a');
+        updateButton.classList.add('button', 'button--succes');
+        updateButton.textContent = 'Update User';
+        updateButton.href = `./pages/update.html?userId=${user.id}`;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('button', 'button--danger');
+        deleteButton.textContent = 'Delete User';
+        deleteButton.addEventListener('click', () => deleteUser(user.id));
+
+
+        card.appendChild(title);
+        card.appendChild(paragraph);
+        card.appendChild(deleteButton);
+        card.appendChild(updateButton);
+
+        container.appendChild(card);
+      });
+    });
+}
+
+function deleteUser (userId) {
+  // TODO: add fetch request with DELETE method to delete a given user. If response is successful, show a confirmation message on the screen.
+}
+
+fetchUsersButton.addEventListener('click', getUsers);
