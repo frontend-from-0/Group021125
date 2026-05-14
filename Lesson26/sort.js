@@ -1,7 +1,11 @@
 // Exercise 1:
-// Given an array of numbers, filter out the even numbers.
+// Given an array of numbers, sort it in ascending order.
 // Expected output: [1, 1, 2, 3, 3, 4, 5, 5, 5, 6, 9]
 const numbers = [3, 1, 4, 11, 5, 9, 2, 6, 5, 3, 5];
+
+const sortedNumbers = [...numbers].sort((a,b) =>a-b);
+console.log("ex1." , numbers, sortedNumbers);
+
 
 
 // Exercise 2: Sorting Strings

@@ -36,7 +36,7 @@ console.log(newArray);      // Output: [1, 2, 3, 4]
 const numbers = [1, 2, 3, 4, 5];
 
 const doubled = numbers.map((num) => num * 2);
-const evenNumbers = numbers.filter((num) => num % 2 === 0);
+const evenNumbers = numbers.filter((num) => num % 2 === 0); // [2, 4]
 const sum = numbers.reduce((acc, num) => acc + num, 0);
 
 console.log(doubled);    // Output: [2, 4, 6, 8, 10]
@@ -58,7 +58,7 @@ const factorial = (n) => {
   if (n === 0 || n === 1) {
     return 1;
   } else {
-    return n * factorial(n - 1);
+    return n * factorial(n - 1); // 5 * 4 * 3 * 2 * 1
   }
 };
 
@@ -69,12 +69,19 @@ console.log(factorial(5)); // Output: 120
 ```
 const outerFunction = (x) => {
   const innerFunction = (y) => {
-    return x + y;
+    return 5 + y;
   };
   return innerFunction;
 };
 
 const addFive = outerFunction(5);
+/*
+Because of closure addFive is not equal to the function below:
+addFive = (y) => {
+    return 5 + y;
+  };
+
+*/
 console.log(addFive(3)); // Output: 8
 ```
 
@@ -102,7 +109,18 @@ console.log(composedFunction(7)); // Output: 14
 
 ```
 const add = (a) => (b) => a + b;
+
 const addFive = add(5);
 
 console.log(addFive(3)); // Output: 8
 ```
+
+const addNumbers = (a, b) => a + b;
+addNumbers(1, 2) // 3
+
+
+const addNumbersV2 = function (a) {
+  return function (b) {
+    return a + b
+  }
+}
