@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+
+.order-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+  background-color: aliceblue;
+  border-radius: 5%;
+  padding: 20px;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
