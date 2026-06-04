@@ -88,7 +88,7 @@ const age = person.age;
 const job = person.job;
 
 // With destructuring
-const { name, age, job } = person;
+const { name, job, age } = person;
 // name = 'Alice', age = 30, job = 'Engineer'
 ```
 

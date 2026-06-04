@@ -6,7 +6,7 @@ Default parameters allow you to specify default values for function parameters. 
 ### Purpose: 
 To provide default values for function parameters if no argument is passed.
 
-### Behavior: 
+### Behavior:
 If an argument is undefined, the default value is used. Other falsy values like null, 0, false, or an empty string will not trigger the default value.
 
 ### Syntax: 
