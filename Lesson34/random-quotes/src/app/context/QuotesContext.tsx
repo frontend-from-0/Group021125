@@ -1,7 +1,6 @@
 'use client';
 
 import { createContext, useState } from 'react';
-import { userId } from '@/lib/auth';
 import { quotes as initialQuotes, Quote } from '@/quotes';
 
 interface QuotesContextInterface {
@@ -46,7 +45,7 @@ export function QuotesContextProvider({ children }) {
         if (elementIndex === index) {
           return {
             ...quote,
-            likedBy: [...quote.likedBy, userId],
+            likedBy: [...quote.likedBy, 'userId'],
           };
         }
         return quote;
