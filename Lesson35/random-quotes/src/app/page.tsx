@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { Button } from '@/components/ui/button';
 import { H1 } from '@/components/ui/typography/H1';
 import { Small } from '@/components/ui/typography/Small';
-import { QuotesContext } from '@/app/context/QuotesContext';
+import { QuotesContext } from '@/app/(context)/QuotesContext';
 import { HeartBreakIcon, HeartIcon } from '@phosphor-icons/react';
 
 

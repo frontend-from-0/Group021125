@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { QuotesContextProvider } from '@/app/context/QuotesContext';
+import { QuotesContextProvider } from '@/app/(context)/QuotesContext';
 import { Button } from '@/components/ui/button';
 import { auth0 } from '@/lib/auth0';
 import Link from 'next/link';
@@ -23,14 +23,13 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const session = await auth0.getSession();
 
-  console.log('session', session);
 
   return (
     <html
       lang='en'
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className='min-h-full flex flex-col'>
+      <body className='min-h-full'>
         <nav>
           <ul className='flex gap-10 justify-end max-w-7xl py-6'>
             {session ? (
