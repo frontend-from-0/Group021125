@@ -30,6 +30,6 @@ export const NewQuoteSchema = z.object({
   author: z
     .string()
     .trim()
-    .min(1, 'Minimum author name length is be 1 character.')
+    .min(1, 'Minimum author name length should be 1 character.')
     .max(50, 'The author is too long, maximum allowed length is 50 chars.'),
 });

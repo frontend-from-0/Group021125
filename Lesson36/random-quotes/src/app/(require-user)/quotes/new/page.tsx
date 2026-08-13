@@ -11,7 +11,9 @@ import { handleNewQuote } from './action';
 import { useActionState } from 'react';
 import { Spinner } from '@/components/ui/spinner';
 import { redirect } from 'next/navigation';
-import { NewQuoteFormState } from '@/types/quotes';
+import { NewQuoteFormState, NewQuoteSchema } from '@/types/quotes';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const intialFormState = {
   success: false,
@@ -19,6 +21,10 @@ const intialFormState = {
 
 // This is an example of a form with uncontolled inputs
 export default function NewQuotePage() {
+  const {
+    register,
+    formState: { errors },
+  } = useForm({ mode: 'onChange', resolver: zodResolver(NewQuoteSchema) });
   const [state, dispatchAction, isPending] = useActionState<
     NewQuoteFormState,
     FormData
@@ -36,10 +42,11 @@ export default function NewQuotePage() {
     redirect('/quotes/new/success');
   }
 
+
   return (
     <form
       autoComplete='off'
-      className='max-w-3xl mx-auto'
+      className={`max-w-3xl mx-auto` }
       action={dispatchAction}
     >
       <FieldGroup>
@@ -48,9 +55,14 @@ export default function NewQuotePage() {
           <Input
             type='text'
             id='quote'
-            name='quote'
             defaultValue={state.data?.quote}
+            {...register('quote')}
           />
+          {errors?.quote && !state.errors?.fieldErrors?.quote && (
+            <FieldError errors={errors?.quote?.message}>
+              {errors?.quote?.message}
+            </FieldError>
+          )}
 
           {state.errors?.fieldErrors?.quote && (
             <FieldError errors={state.errors?.fieldErrors.quote}>
@@ -61,7 +73,17 @@ export default function NewQuotePage() {
 
         <Field>
           <FieldLabel htmlFor='author'>Author</FieldLabel>
-          <Input type='text' id='author' name='author' defaultValue={state.data?.author}/>
+          <Input
+            type='text'
+            id='author'
+            defaultValue={state.data?.author}
+            {...register('author')}
+          />
+          {errors?.author && !state.errors?.fieldErrors?.author && (
+            <FieldError errors={errors?.author?.message}>
+              {errors?.author?.message}
+            </FieldError>
+          )}
           {state.errors?.fieldErrors?.author && (
             <FieldError errors={state.errors?.fieldErrors.author}>
               {state.errors?.fieldErrors?.author?.join(', ')}

@@ -8,7 +8,7 @@ const quoteRegex = /[^\p{L}\p{N}\p{M}\p{Zs}'"“”‘’.,!?;:()\-—–…/&@#
 
 // Form with controlled inputs example
 export default function ExampleFormPage () {
-  const [quote, setQuote] = useState('Some initial value');
+  const [quote, setQuote] = useState('');
   const [quoteError, setQuoteError] = useState(null);
 
   function handleSubmit (event) {
@@ -26,12 +26,22 @@ export default function ExampleFormPage () {
     }
    };
 
+   function validateQuote(inputValue) {
+    console.log('Triggered validate quote', inputValue);
+    setQuote(inputValue);
+    if (inputValue.length < 3) {
+      setQuoteError('The quote should have at least 3 chars.')
+    } else {
+      setQuoteError(null)
+    }
+   }
+
   return (
     <form onSubmit={handleSubmit}>
       <FieldGroup>
          <Field>
            <FieldLabel htmlFor="quote">Quote</FieldLabel>
-           <Input type="text" id="quote" autoComplete="off" onChange={(event) => setQuote(event.target.value.trim())} value={quote}/>
+           <Input type="text" id="quote" autoComplete="off" onChange={(event) => validateQuote(event.target.value.trim())} value={quote}/>
 
             {// TODO: Anna to check why FieldError requires children
             }
