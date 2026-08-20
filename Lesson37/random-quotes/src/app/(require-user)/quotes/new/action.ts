@@ -1,9 +1,9 @@
 'use server';
 
 import { auth0 } from '@/lib/auth0';
+import { createQuote } from '@/actions/quotes';
 import { NewQuoteFormState, NewQuoteSchema } from '@/types/quotes';
 import z from 'zod';
-
 
 export async function handleNewQuote(
   _currentState: NewQuoteFormState,
@@ -28,38 +28,32 @@ export async function handleNewQuote(
   if (!safeParsedResult.success) {
     const errors = z.flattenError(safeParsedResult.error);
 
-    console.log('errors from zod', errors);
-
     return {
       success: false,
       errors: {
-        fieldErrors: errors.fieldErrors
+        fieldErrors: errors.fieldErrors,
       },
       data: {
         quote: String(rawData.quote),
-        author: String(rawData.author)
-      }
-    }
-  } else {
-    return {
-      success: true,
-    }
+        author: String(rawData.author),
+      },
+    };
   }
+
+  const insertResult = await createQuote(safeParsedResult.data);
+
+  if (!insertResult.success) {
+    return {
+      success: false,
+      message: insertResult.message ?? 'Could not save the quote',
+      data: {
+        quote: safeParsedResult.data.quote,
+        author: safeParsedResult.data.author,
+      },
+    };
+  }
+
+  return {
+    success: true,
+  };
 }
-
-
-/* 
-Plain error result:
-error: Error [ZodError]: [
-    {
-      "origin": "string",
-      "code": "too_small",
-      "minimum": 1,
-      "inclusive": true,
-      "path": [
-        "author"
-      ],
-      "message": "Minimum author name length is be 1 character."
-    }
-
-*/
