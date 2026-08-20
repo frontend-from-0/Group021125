@@ -3,7 +3,7 @@ import 'server-only';
 import { ObjectId } from 'mongodb';
 import { quotesCollection } from '@/lib/db/collections';
 import { quotes as seedQuotes } from '@/quotes';
-import type { Quote } from '@/types/quotes';
+import type { Quote, QuoteSeed } from '@/types/quotes';
 import type { QuoteDocument } from '@/types/quotes-document';
 
 function toQuote(document: QuoteDocument): Quote {
@@ -24,13 +24,8 @@ function parseQuoteObjectId(quoteId: string): ObjectId | null {
   return new ObjectId(quoteId);
 }
 
-async function ensureQuotesSeeded(): Promise<void> {
+async function insertQuotes(seedQuotes: QuoteSeed[]): Promise<void> {
   const collection = await quotesCollection();
-  const existing = await collection.findOne({}, { projection: { _id: 1 } });
-
-  if (existing) {
-    return;
-  }
 
   await collection.insertMany(
     seedQuotes.map((seedQuote) => ({
@@ -44,8 +39,8 @@ async function ensureQuotesSeeded(): Promise<void> {
 }
 
 export async function listAllQuotes(): Promise<Quote[]> {
-  await ensureQuotesSeeded();
   const collection = await quotesCollection();
+  //.sort({ _id: 1 }) - ascending order
   const documents = await collection.find({}).sort({ _id: 1 }).toArray();
   return documents.map(toQuote);
 }
