@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { QuotesContextProvider } from '@/app/(context)/QuotesContext';
 import { Button } from '@/components/ui/button';
 import { auth0 } from '@/lib/auth0';
 import Link from 'next/link';
@@ -54,7 +53,7 @@ export default async function RootLayout({ children }) {
             )}
           </ul>
         </nav>
-        <QuotesContextProvider>{children}</QuotesContextProvider>
+        {children}
       </body>
     </html>
   );
