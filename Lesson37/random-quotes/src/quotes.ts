@@ -1,7 +1,6 @@
-import { Quote } from './types/quotes';
+import { QuoteSeed } from './types/quotes';
 
-// export const quotes: Array<Quote>
-export const quotes: Quote[] = [
+export const quotes: QuoteSeed[] = [
   {
     quote: 'Be yourself; everyone else is already taken.',
     author: 'Oscar Wilde',

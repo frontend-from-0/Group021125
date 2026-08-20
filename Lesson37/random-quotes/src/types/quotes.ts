@@ -16,9 +16,16 @@ export interface NewQuoteFormState {
 }
 
 export interface Quote {
+  id: string;
   quote: string;
   author: string;
-  likedBy?: string[];
+  likedBy: string[];
+  createdBy: string;
+}
+
+export interface QuoteSeed {
+  quote: string;
+  author: string;
 }
 
 export const NewQuoteSchema = z.object({
