@@ -5,7 +5,7 @@ import { getDb } from '@/lib/db/client';
 import type { QuoteDocument } from '@/types/quotes-document';
 
 export const Collections = {
-  quotes: 'quotes',
+  quotes: 'quotes'
 } as const;
 
 export async function quotesCollection(): Promise<Collection<QuoteDocument>> {

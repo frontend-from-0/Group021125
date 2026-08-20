@@ -1,6 +1,7 @@
 'use server';
 
 import { auth0 } from '@/lib/auth0';
+import { insertQuote } from '@/repositories/quotes';
 import { NewQuoteFormState, NewQuoteSchema } from '@/types/quotes';
 import z from 'zod';
 
@@ -41,6 +42,16 @@ export async function handleNewQuote(
       }
     }
   } else {
+
+    console.log(safeParsedResult);
+
+    // Store data in DB
+    await insertQuote ({
+      quote: safeParsedResult.data.quote,
+      author: safeParsedResult.data.author,
+      createdBy: session.user.sub,
+    })
+
     return {
       success: true,
     }

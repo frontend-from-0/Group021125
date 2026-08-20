@@ -21,12 +21,10 @@ export interface Quote {
   author: string;
   likedBy: string[];
   createdBy: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface QuoteSeed {
-  quote: string;
-  author: string;
-}
 
 export const NewQuoteSchema = z.object({
   quote: z

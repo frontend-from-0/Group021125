@@ -54,7 +54,7 @@ export default async function RootLayout({ children }) {
             )}
           </ul>
         </nav>
-        <QuotesContextProvider>{children}</QuotesContextProvider>
+        {children}
       </body>
     </html>
   );
