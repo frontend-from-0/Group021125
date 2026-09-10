@@ -1,13 +1,13 @@
 # Prisma + MongoDB integration plan
 
 Why Prisma
-MongoDB lets you store documents, but using it directly means learning connection setup and MongoDB query syntax, and then manually translating database results into the shapes your app expects. Prisma adds a thin, consistent layer on top: you define your data model once (the contract), and Prisma generates typed APIs for common operations (create/read/update/delete). That reduces mistakes, makes the code easier to reason about, and prevents “mystery runtime errors” as your app grows.
+MongoDB lets you store documents, but using it directly means learning connection setup and MongoDB query syntax, and then manually translating database results into the shapes your app expects. Prisma adds a thin, consistent layer on top: you define your data model once (the contract), and Prisma generates typed APIs for common operations (create/read/update/delete). That reduces mistakes, makes the code easier to reason about, and prevents "mystery runtime errors" as your app grows.
 
 Reference: Prisma builds around a shared, type-safe contract to drive both query typing and schema/tooling workflows ([prisma.io](https://www.prisma.io/)).
 
 Quick glossary:
 - Contract (Prisma v8): the source-of-truth data model you write (for example `prisma/contract.prisma` or `prisma/contract.ts`). Prisma reads it and emits machine-readable artifacts (like `contract.json`) plus typed query APIs.
-- Schema: a data-model definition file. In older Prisma versions you wrote `schema.prisma`; in Prisma v8, the contract plays the main “schema” role for the Prisma toolchain.
+- Schema: a data-model definition file. In older Prisma versions you wrote `schema.prisma`; in Prisma v8, the contract plays the main "schema" role for the Prisma toolchain.
 
 ## 1. Prerequisites
 
@@ -24,7 +24,12 @@ From the project root install Prisma and its client:
 npm i -D prisma @prisma/client
 ```
 
-Prisma’s Prisma v8 CLI is configured via `prisma.config.ts` in the project root and reads environment variables (like `DATABASE_URL`) from `.env`.
+> **Known issue:** npm 9.x/10.x may crash with `Cannot read properties of null (reading 'edgesOut')` during install. This is a [known Arborist bug](https://github.com/npm/cli/issues/9787) triggered by wildcard peer dependency ranges in some packages. Fix — add `--legacy-peer-deps`:
+> ```bash
+> npm i -D prisma @prisma/client --legacy-peer-deps
+> ```
+
+Prisma's Prisma v8 CLI is configured via `prisma.config.ts` in the project root and reads environment variables (like `DATABASE_URL`) from `.env`.
 
 Docs:
 - [Prisma 8 CLI configuration](https://www.prisma.io/docs/cli/configuration)
@@ -55,7 +60,7 @@ Edit `.env`:
 DATABASE_URL="mongodb://127.0.0.1:27017/app?replicaSet=rs0"
 ```
 
-For MongoDB Atlas, paste the connection string from the Atlas “Connect” UI, and keep the database name consistent with your intended `db` usage.
+For MongoDB Atlas, paste the connection string from the Atlas "Connect" UI, and keep the database name consistent with your intended `db` usage.
 
 Docs:
 - [Add Prisma Next to an existing MongoDB project](https://www.prisma.io/docs/next/add-to-existing-project/mongodb)
@@ -124,5 +129,3 @@ Docs:
 Docs (query + contract runtime concepts):
 - [The Prisma 8 data contract](https://www.prisma.io/docs/orm/contract-authoring/the-data-contract)
 - [Add Prisma 8 to an existing MongoDB project](https://www.prisma.io/docs/prisma-orm/add-to-existing-project/mongodb)
-
-

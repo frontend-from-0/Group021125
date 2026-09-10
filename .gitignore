@@ -2,3 +2,6 @@ HW
 .DS_Store
 Refactoring_UI
 .vscode
+node_modules/
+dist/
+.env

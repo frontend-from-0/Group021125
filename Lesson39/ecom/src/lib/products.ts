@@ -1,4 +1,5 @@
 import { parseStorefrontFiltersFromSearchParams } from "@/lib/validation";
+import { db } from '@/prisma/db';
 import { Currency } from "@/types/currency";
 import { type ProductCategory, type ProductSort } from "@/types/product";
 
@@ -10,7 +11,7 @@ export type Product = {
   currency: Currency;
   category: ProductCategory;
   stock: number;
-  imageUrls: string[];
+  imageUrls: readonly string[];
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -24,7 +25,21 @@ export type GetStorefrontProductsFilters = {
 export async function getStorefrontProducts(
   _filters: GetStorefrontProductsFilters = {},
 ): Promise<Product[]> {
-  return [];
+  const products = await db.orm.products.where({ isActive: true }).all();
+
+  return products.map((product) => ({
+    id: String(product._id),
+    name: product.name,
+    description: product.description,
+    priceCents: product.priceCents,
+    currency: product.currency as Currency,
+    category: product.category as ProductCategory,
+    stock: product.stock,
+    imageUrls: product.imageUrls,
+    isActive: product.isActive,
+    createdAt: product.createdAt,
+    updatedAt: product.updatedAt,
+  }));
 }
 
 export async function getAllProducts(): Promise<Product[]> {
