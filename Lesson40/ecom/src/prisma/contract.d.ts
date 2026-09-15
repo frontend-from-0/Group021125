@@ -36,6 +36,8 @@ export type FieldOutputTypes = {
       readonly stock: CodecTypes['mongo/int32@1']['output'];
       readonly imageUrls: ReadonlyArray<CodecTypes['mongo/string@1']['output']>;
       readonly isActive: CodecTypes['mongo/bool@1']['output'];
+      readonly stripePriceId: CodecTypes['mongo/string@1']['output'];
+      readonly stripeProductId: CodecTypes['mongo/string@1']['output'];
       readonly createdAt: CodecTypes['mongo/date@1']['output'];
       readonly updatedAt: CodecTypes['mongo/date@1']['output'];
     };
@@ -63,6 +65,8 @@ export type FieldInputTypes = {
       readonly stock: CodecTypes['mongo/int32@1']['input'];
       readonly imageUrls: ReadonlyArray<CodecTypes['mongo/string@1']['input']>;
       readonly isActive: CodecTypes['mongo/bool@1']['input'];
+      readonly stripePriceId: CodecTypes['mongo/string@1']['input'];
+      readonly stripeProductId: CodecTypes['mongo/string@1']['input'];
       readonly createdAt: CodecTypes['mongo/date@1']['input'];
       readonly updatedAt: CodecTypes['mongo/date@1']['input'];
     };
@@ -119,6 +123,8 @@ type ContractBase = Omit<
                       readonly items: { readonly bsonType: 'string' };
                     };
                     readonly isActive: { readonly bsonType: 'bool' };
+                    readonly stripePriceId: { readonly bsonType: 'string' };
+                    readonly stripeProductId: { readonly bsonType: 'string' };
                     readonly createdAt: { readonly bsonType: 'date' };
                     readonly updatedAt: { readonly bsonType: 'date' };
                   };
@@ -131,6 +137,8 @@ type ContractBase = Omit<
                     'description',
                     'imageUrls',
                     'isActive',
+                    'stripePriceId',
+                    'stripeProductId',
                     'name',
                     'priceCents',
                     'stock',
@@ -241,6 +249,14 @@ type ContractBase = Omit<
               readonly isActive: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/bool@1' };
+              };
+              readonly stripePriceId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/string@1' };
+              };
+              readonly stripeProductId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/string@1' };
               };
               readonly createdAt: {
                 readonly nullable: false;
