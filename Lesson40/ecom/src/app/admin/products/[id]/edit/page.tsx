@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Typography } from "@/components/ui/typography";
 import { getProductById } from "@/lib/products";
 
 type EditProductPageProps = {
@@ -26,10 +27,8 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
   return (
     <main className="space-y-6 p-6">
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          Edit product
-        </h1>
-        <p className="text-sm text-muted-foreground">{product.name}</p>
+        <Typography variant="page-title">Edit product</Typography>
+        <Typography variant="muted">{product.name}</Typography>
       </div>
 
       <Card>

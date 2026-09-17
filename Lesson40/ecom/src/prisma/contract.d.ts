@@ -17,7 +17,7 @@ import type {
 } from '@prisma/orm-mongo/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'141361a6edf074bee2c823bda77dd3f92c86d45aeabbcf651f5d3ce4593649a8'>;
+  StorageHashBase<'fa00fe56dbbaf111dcd90bde5d036aa75b640783ff0c416f508f9d80421845b5'>;
 export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'251b3ce23f6c9f561892e7c1af9d2cc941a13d64ba1aa7226b90036b09568cc3'>;
@@ -35,6 +35,8 @@ export type FieldOutputTypes = {
       readonly category: 'ELECTRONICS' | 'CLOTHING' | 'HOME' | 'SPORTS' | 'OTHER';
       readonly stock: CodecTypes['mongo/int32@1']['output'];
       readonly imageUrls: ReadonlyArray<CodecTypes['mongo/string@1']['output']>;
+      readonly priceId: CodecTypes['mongo/string@1']['output'];
+      readonly productId: CodecTypes['mongo/string@1']['output'];
       readonly isActive: CodecTypes['mongo/bool@1']['output'];
       readonly createdAt: CodecTypes['mongo/date@1']['output'];
       readonly updatedAt: CodecTypes['mongo/date@1']['output'];
@@ -62,6 +64,8 @@ export type FieldInputTypes = {
       readonly category: 'ELECTRONICS' | 'CLOTHING' | 'HOME' | 'SPORTS' | 'OTHER';
       readonly stock: CodecTypes['mongo/int32@1']['input'];
       readonly imageUrls: ReadonlyArray<CodecTypes['mongo/string@1']['input']>;
+      readonly priceId: CodecTypes['mongo/string@1']['input'];
+      readonly productId: CodecTypes['mongo/string@1']['input'];
       readonly isActive: CodecTypes['mongo/bool@1']['input'];
       readonly createdAt: CodecTypes['mongo/date@1']['input'];
       readonly updatedAt: CodecTypes['mongo/date@1']['input'];
@@ -78,6 +82,44 @@ export type FieldInputTypes = {
     };
   };
 };
+
+export namespace Models {
+  export type unbound_Product = {
+    _id: CodecTypes['mongo/objectId@1']['output'];
+    name: CodecTypes['mongo/string@1']['output'];
+    description: CodecTypes['mongo/string@1']['output'];
+    priceCents: CodecTypes['mongo/int32@1']['output'];
+    currency: 'EUR' | 'GBP' | 'TRY';
+    category: 'ELECTRONICS' | 'CLOTHING' | 'HOME' | 'SPORTS' | 'OTHER';
+    stock: CodecTypes['mongo/int32@1']['output'];
+    imageUrls: ReadonlyArray<CodecTypes['mongo/string@1']['output']>;
+    priceId: CodecTypes['mongo/string@1']['output'];
+    productId: CodecTypes['mongo/string@1']['output'];
+    isActive: CodecTypes['mongo/bool@1']['output'];
+    createdAt: CodecTypes['mongo/date@1']['output'];
+    updatedAt: CodecTypes['mongo/date@1']['output'];
+    readonly [RelationKeys]?: never;
+  };
+  export type unbound_User = {
+    _id: CodecTypes['mongo/objectId@1']['output'];
+    email: CodecTypes['mongo/string@1']['output'];
+    firstName: CodecTypes['mongo/string@1']['output'] | null;
+    lastName: CodecTypes['mongo/string@1']['output'] | null;
+    profilePictureUrl: CodecTypes['mongo/string@1']['output'] | null;
+    createdAt: CodecTypes['mongo/date@1']['output'];
+    updatedAt: CodecTypes['mongo/date@1']['output'];
+    auth0_id: CodecTypes['mongo/string@1']['output'];
+    readonly [RelationKeys]?: never;
+  };
+}
+
+export declare const models: {
+  __unbound__: {
+    Product: Models.unbound_Product;
+    User: Models.unbound_User;
+  };
+};
+
 export type TypeMaps = MongoTypeMaps<CodecTypes, FieldOutputTypes, FieldInputTypes>;
 
 type ContractBase = Omit<
@@ -118,6 +160,8 @@ type ContractBase = Omit<
                       readonly bsonType: 'array';
                       readonly items: { readonly bsonType: 'string' };
                     };
+                    readonly priceId: { readonly bsonType: 'string' };
+                    readonly productId: { readonly bsonType: 'string' };
                     readonly isActive: { readonly bsonType: 'bool' };
                     readonly createdAt: { readonly bsonType: 'date' };
                     readonly updatedAt: { readonly bsonType: 'date' };
@@ -133,6 +177,8 @@ type ContractBase = Omit<
                     'isActive',
                     'name',
                     'priceCents',
+                    'priceId',
+                    'productId',
                     'stock',
                     'updatedAt',
                   ];
@@ -237,6 +283,14 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/string@1' };
                 readonly many: true;
+              };
+              readonly priceId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/string@1' };
+              };
+              readonly productId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'mongo/string@1' };
               };
               readonly isActive: {
                 readonly nullable: false;

@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Typography } from "@/components/ui/typography";
 import { requireUser } from "@/lib/auth0";
 
 export default async function ProfilePage() {
@@ -34,9 +35,9 @@ export default async function ProfilePage() {
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
           <div className="space-y-1">
-            <p className="font-medium text-foreground">{displayName}</p>
+            <Typography variant="emphasis">{displayName}</Typography>
             {user.email ? (
-              <p className="text-sm text-muted-foreground">{user.email}</p>
+              <Typography variant="muted">{user.email}</Typography>
             ) : null}
           </div>
         </CardContent>

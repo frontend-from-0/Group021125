@@ -1,5 +1,7 @@
 'use server';
 
+import { MongoFieldFilter } from "@prisma/orm-mongo/query-ast/execution";
+
 import { toAppProduct } from "@/lib/utils";
 import { db } from "@/prisma/db";
 import {
@@ -43,7 +45,10 @@ export async function getStorefrontProducts(
       ? db.orm.products.where({ isActive: true })
       : db.orm.products.where({ isActive: true, category });
 
-  const products = await query.orderBy(storefrontOrderBy(sort)).all();
+  const products = await query
+    .where(MongoFieldFilter.gt("stock", 0))
+    .orderBy(storefrontOrderBy(sort))
+    .all();
   return products.map(toAppProduct);
 }
 
@@ -69,6 +74,8 @@ export async function addProduct(
     stock: product.stock,
     imageUrls: product.imageUrls,
     isActive: product.isActive,
+    priceId: product.priceId,
+    productId: product.productId,
     createdAt: now,
     updatedAt: now,
   });

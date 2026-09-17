@@ -68,6 +68,8 @@ export type Product = {
   stock: number;
   imageUrls: readonly string[];
   isActive: boolean;
+  priceId: string;
+  productId: string;
   createdAt: Date;
   updatedAt: Date;
 };

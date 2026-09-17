@@ -8,6 +8,8 @@ model Product {
   category    Category
   stock       Int
   imageUrls   String[]
+  priceId     String
+  productId   String
   isActive    Boolean
   createdAt   DateTime
   updatedAt   DateTime

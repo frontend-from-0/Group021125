@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Typography } from "@/components/ui/typography";
 
 export const metadata = {
   title: "Orders",
@@ -13,12 +14,10 @@ export default function AdminOrdersPage() {
   return (
     <main className="space-y-6 p-6">
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          Orders
-        </h1>
-        <p className="text-sm text-muted-foreground">
+        <Typography variant="page-title">Orders</Typography>
+        <Typography variant="muted">
           View and manage customer orders.
-        </p>
+        </Typography>
       </div>
 
       <Card>

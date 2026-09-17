@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Typography } from "@/components/ui/typography";
 import { getAllProducts } from "@/lib/products";
 import { Currency, formatPrice } from "@/types/currency";
 import { formatCategoryLabel, type ProductCategory } from "@/types/product";
@@ -21,10 +22,10 @@ export async function AdminProductsTable() {
   if (products.length === 0) {
     return (
       <div className="flex min-h-48 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 px-6 py-12 text-center">
-        <p className="text-sm font-medium text-foreground">No products yet</p>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <Typography variant="empty-title">No products yet</Typography>
+        <Typography variant="muted" className="mt-1">
           Create your first product to see it listed here.
-        </p>
+        </Typography>
         <Button asChild className="mt-4">
           <Link href="/admin/products/new">Create product</Link>
         </Button>
@@ -62,7 +63,11 @@ export async function AdminProductsTable() {
                   ) : null}
                 </div>
               </TableCell>
-              <TableCell className="font-medium">{product.name}</TableCell>
+              <TableCell>
+                <Typography as="span" variant="emphasis">
+                  {product.name}
+                </Typography>
+              </TableCell>
               <TableCell>
                 {formatCategoryLabel(product.category as ProductCategory)}
               </TableCell>

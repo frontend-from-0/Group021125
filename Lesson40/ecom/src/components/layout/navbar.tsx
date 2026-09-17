@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { Typography } from "@/components/ui/typography";
 import { getAdmin, getSessionUser } from "@/lib/auth0";
 
 export async function Navbar() {
@@ -28,12 +29,9 @@ export async function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link
-          href="/"
-          className="text-sm font-semibold tracking-tight text-foreground"
-        >
-          Ecommerce Store
-        </Link>
+        <Typography asChild variant="brand">
+          <Link href="/">Ecommerce Store</Link>
+        </Typography>
 
         <nav className="flex items-center gap-2">
           {user ? (
@@ -66,9 +64,9 @@ export async function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuLabel className="font-normal">
-                    <p className="text-sm font-medium">{displayName}</p>
+                    <Typography variant="empty-title">{displayName}</Typography>
                     {user.email ? (
-                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                      <Typography variant="caption">{user.email}</Typography>
                     ) : null}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />

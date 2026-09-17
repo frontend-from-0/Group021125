@@ -1,5 +1,6 @@
 import { ProductCard } from "@/components/storefront/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Typography } from "@/components/ui/typography";
 import { getStorefrontProducts } from "@/lib/products";
 import type { ProductCategory, ProductSort } from "@/types/product";
 type ProductGridProps = {
@@ -16,12 +17,12 @@ export async function ProductGrid({ category, sort }: ProductGridProps) {
   if (products.length === 0) {
     return (
       <div className="flex min-h-48 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 px-6 py-12 text-center">
-        <p className="text-sm font-medium text-foreground">No products available yet</p>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <Typography variant="empty-title">No products available yet</Typography>
+        <Typography variant="muted" className="mt-1">
           {category === "all"
             ? "Check back soon — new items will appear here."
             : "No products in this category. Try another filter."}
-        </p>
+        </Typography>
       </div>
     );
   }
@@ -38,6 +39,8 @@ export async function ProductGrid({ category, sort }: ProductGridProps) {
           currency={product.currency}
           category={product.category as ProductCategory}
           imageUrl={product.imageUrls[0]}
+          priceId={product.priceId}
+          quantity={'1'}
         />
       ))}
     </div>

@@ -4,6 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Typography } from "@/components/ui/typography";
 
 export const metadata = {
   title: "Users",
@@ -13,12 +14,10 @@ export default function AdminUsersPage() {
   return (
     <main className="space-y-6 p-6">
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          Users
-        </h1>
-        <p className="text-sm text-muted-foreground">
+        <Typography variant="page-title">Users</Typography>
+        <Typography variant="muted">
           Manage store customers and admin accounts.
-        </p>
+        </Typography>
       </div>
 
       <Card>

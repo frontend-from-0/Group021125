@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Typography } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { ACCEPTED_IMAGE_ACCEPT_ATTR, MAX_IMAGE_MB } from "@/lib/product-images";
 import { Currency, EU_CURRENCY_OPTIONS } from "@/types/currency";
@@ -46,14 +47,14 @@ export function CreateProductForm() {
   if (state?.success) {
     return (
       <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-foreground">Product created</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <Typography variant="heading">Product created</Typography>
+        <Typography variant="muted" className="mt-2">
           The product was saved to MongoDB and images were uploaded to Vercel Blob.
-        </p>
-        <p className="mt-4 text-sm">
+        </Typography>
+        <Typography variant="body" className="mt-4">
           Product ID:{" "}
           <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{state.productId}</code>
-        </p>
+        </Typography>
         <div className="mt-6 flex gap-3">
           <Button asChild>
             <Link href="/admin/products/new">Create another product</Link>
@@ -76,18 +77,18 @@ export function CreateProductForm() {
       {state && !state.success ? (
         <div
           role="alert"
-          className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+          className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3"
         >
-          {state.message}
+          <Typography variant="error">{state.message}</Typography>
         </div>
       ) : null}
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Basic details</h2>
-          <p className="text-sm text-muted-foreground">
+          <Typography variant="section-title">Basic details</Typography>
+          <Typography variant="muted">
             Core product information stored in the <code>products</code> collection.
-          </p>
+          </Typography>
         </div>
 
         <div className="grid gap-4">
@@ -149,10 +150,10 @@ export function CreateProductForm() {
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Pricing & inventory</h2>
-          <p className="text-sm text-muted-foreground">
+          <Typography variant="section-title">Pricing & inventory</Typography>
+          <Typography variant="muted">
             Price is entered in major units and stored as <code>priceCents</code> in the database.
-          </p>
+          </Typography>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3">
@@ -221,11 +222,11 @@ export function CreateProductForm() {
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Images</h2>
-          <p className="text-sm text-muted-foreground">
+          <Typography variant="section-title">Images</Typography>
+          <Typography variant="muted">
             Files are uploaded to Vercel Blob; only the returned URLs are saved on
             the product. Max {MAX_IMAGE_MB} MB per image.
-          </p>
+          </Typography>
         </div>
 
         <FormField
@@ -247,20 +248,22 @@ export function CreateProductForm() {
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-base font-semibold text-foreground">Visibility</h2>
-          <p className="text-sm text-muted-foreground">
+          <Typography variant="section-title">Visibility</Typography>
+          <Typography variant="muted">
             Inactive products stay in the database but can be hidden from the storefront later.
-          </p>
+          </Typography>
         </div>
 
-        <label className="flex items-center gap-3 text-sm">
+        <label className="flex items-center gap-3">
           <input
             type="checkbox"
             name="isActive"
             defaultChecked={values.isActive}
             className="size-4 rounded border border-input accent-primary"
           />
-          <span>Product is active and visible in the store</span>
+          <Typography as="span" variant="body">
+            Product is active and visible in the store
+          </Typography>
         </label>
       </section>
 
@@ -294,9 +297,9 @@ function FormField({
       <Label htmlFor={id}>{label}</Label>
       {children}
       {error ? (
-        <p id={`${id}-error`} className="text-sm text-destructive">
+        <Typography id={`${id}-error`} variant="error">
           {error}
-        </p>
+        </Typography>
       ) : null}
     </div>
   );

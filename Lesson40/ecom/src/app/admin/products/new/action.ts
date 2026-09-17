@@ -105,6 +105,8 @@ export async function createProduct(
     };
   }
 
+  // TODO: cal stripe to create product and price, then add price and product Ids to the product below
+
 
 
   const createdProduct = await addProduct({

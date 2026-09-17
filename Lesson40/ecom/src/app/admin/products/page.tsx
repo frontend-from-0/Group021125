@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { AdminProductsTable } from "@/components/admin/admin-products-table";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Typography } from "@/components/ui/typography";
 import {
   Table,
   TableBody,
@@ -69,12 +70,10 @@ export default function AdminProductsPage() {
     <main className="space-y-6 p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            Products
-          </h1>
-          <p className="text-sm text-muted-foreground">
+          <Typography variant="page-title">Products</Typography>
+          <Typography variant="muted">
             Manage catalog items, pricing, and availability.
-          </p>
+          </Typography>
         </div>
         <Button asChild>
           <Link href="/admin/products/new">Create product</Link>

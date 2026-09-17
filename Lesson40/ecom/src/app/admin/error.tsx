@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Typography } from "@/components/ui/typography";
 
 type AdminErrorPageProps = {
   error: Error & { digest?: string };
@@ -16,10 +17,10 @@ export default function AdminErrorPage({ error, reset }: AdminErrorPageProps) {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
-      <h2 className="text-lg font-semibold text-foreground">Admin error</h2>
-      <p className="max-w-md text-sm text-muted-foreground">
+      <Typography variant="heading">Admin error</Typography>
+      <Typography variant="muted" className="max-w-md">
         Something went wrong in the admin area.
-      </p>
+      </Typography>
       <Button onClick={reset}>Try again</Button>
     </div>
   );

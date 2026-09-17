@@ -22,6 +22,8 @@ export function toAppProduct(product: DbProduct): Product {
     stock: product.stock,
     imageUrls: product.imageUrls,
     isActive: product.isActive,
+    priceId: product.priceId,
+    productId: product.productId,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
   };

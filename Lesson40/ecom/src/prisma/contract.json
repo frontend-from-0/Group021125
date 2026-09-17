@@ -139,6 +139,20 @@
                   "kind": "scalar"
                 }
               },
+              "priceId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/string@1",
+                  "kind": "scalar"
+                }
+              },
+              "productId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/string@1",
+                  "kind": "scalar"
+                }
+              },
               "stock": {
                 "nullable": false,
                 "type": {
@@ -281,6 +295,12 @@
                     "priceCents": {
                       "bsonType": "int"
                     },
+                    "priceId": {
+                      "bsonType": "string"
+                    },
+                    "productId": {
+                      "bsonType": "string"
+                    },
                     "stock": {
                       "bsonType": "int"
                     },
@@ -298,6 +318,8 @@
                     "isActive",
                     "name",
                     "priceCents",
+                    "priceId",
+                    "productId",
                     "stock",
                     "updatedAt"
                   ]
@@ -409,7 +431,7 @@
         "kind": "mongo-database"
       }
     },
-    "storageHash": "141361a6edf074bee2c823bda77dd3f92c86d45aeabbcf651f5d3ce4593649a8"
+    "storageHash": "fa00fe56dbbaf111dcd90bde5d036aa75b640783ff0c416f508f9d80421845b5"
   },
   "capabilities": {},
   "extensions": {},

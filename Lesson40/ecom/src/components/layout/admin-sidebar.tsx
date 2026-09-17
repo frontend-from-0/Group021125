@@ -9,6 +9,7 @@ import {
   Users,
 } from "lucide-react";
 
+import { Typography } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
 const adminLinks = [
@@ -24,9 +25,9 @@ export function AdminSidebar() {
   return (
     <aside className="hidden w-60 shrink-0 border-r border-border bg-card md:block">
       <div className="flex h-full flex-col gap-1 p-4">
-        <p className="px-3 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <Typography variant="overline" className="px-3 py-2">
           Admin
-        </p>
+        </Typography>
         <nav className="flex flex-col gap-1">
           {adminLinks.map(({ href, label, icon: Icon }) => {
             const isActive =
