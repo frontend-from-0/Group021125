@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import { ProductSort } from "@/types/product";
+import {
+  ProductSort,
+  type ProductCategory,
+} from "@/types/product";
 
 import { productCategorySchema } from "./product";
 
@@ -38,4 +41,13 @@ export function parseStorefrontFiltersFromSearchParams(
   }
 
   return { category: "all", sort: ProductSort.NAME_ASC };
+}
+
+export function parseStorefrontFilters(
+  searchParams: Record<string, string | string[] | undefined>,
+): { categoryValue: ProductCategory | "all"; sortValue: ProductSort } {
+  const { category, sort } =
+    parseStorefrontFiltersFromSearchParams(searchParams);
+
+  return { categoryValue: category, sortValue: sort };
 }
