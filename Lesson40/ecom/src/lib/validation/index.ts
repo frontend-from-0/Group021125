@@ -9,6 +9,7 @@ export {
   type CreateProductFormInput,
 } from "./product";
 export {
+  parseStorefrontFilters,
   parseStorefrontFiltersFromSearchParams,
   productSortSchema,
   storefrontCategoryFilterSchema,
