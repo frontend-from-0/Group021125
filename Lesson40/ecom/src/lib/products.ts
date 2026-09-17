@@ -68,6 +68,8 @@ export async function addProduct(
     category: product.category,
     stock: product.stock,
     imageUrls: product.imageUrls,
+    stripePriceId: product.stripePriceId,
+    stripeProductId: product.stripeProductId,
     isActive: product.isActive,
     createdAt: now,
     updatedAt: now,

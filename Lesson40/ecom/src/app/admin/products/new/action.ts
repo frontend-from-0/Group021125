@@ -107,6 +107,7 @@ export async function createProduct(
 
 
 
+  // Add  stripe product + price id
   const createdProduct = await addProduct({
     name: parsed.data.name,
     description: parsed.data.description,
@@ -116,6 +117,8 @@ export async function createProduct(
     stock: parseInt(parsed.data.stock),
     imageUrls: imageUrls,
     isActive: parsed.data.isActive,
+    stripePriceId: '',
+    stripeProductId: '',
   });
 
   if (!createdProduct) {

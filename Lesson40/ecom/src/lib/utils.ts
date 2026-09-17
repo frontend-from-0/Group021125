@@ -21,6 +21,8 @@ export function toAppProduct(product: DbProduct): Product {
     category: product.category as ProductCategory,
     stock: product.stock,
     imageUrls: product.imageUrls,
+    stripePriceId: product.stripePriceId,
+    stripeProductId: product.stripeProductId,
     isActive: product.isActive,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,

@@ -67,6 +67,8 @@ export type Product = {
   category: ProductCategory;
   stock: number;
   imageUrls: readonly string[];
+  stripePriceId: string;
+  stripeProductId: string;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;

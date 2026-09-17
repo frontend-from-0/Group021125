@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Currency, formatPrice } from "@/types/currency";
 import { formatCategoryLabel, type ProductCategory } from "@/types/product";
+import { CheckoutButton } from './checkout-button';
 
 type ProductCardProps = {
   id: string;
@@ -19,6 +20,7 @@ type ProductCardProps = {
   currency: string;
   category: ProductCategory;
   imageUrl?: string;
+  stripePriceId: string;
 };
 
 export function ProductCard({
@@ -28,6 +30,7 @@ export function ProductCard({
   currency,
   category,
   imageUrl,
+  stripePriceId
 }: ProductCardProps) {
   const priceLabel = formatPrice(
     priceCents,
@@ -58,8 +61,9 @@ export function ProductCard({
         </div>
         <CardDescription className="line-clamp-2">{description}</CardDescription>
       </CardHeader>
-      <CardFooter className="border-t border-border pt-4">
+      <CardFooter className="border-t border-border pt-4 flex justify-between">
         <p className="text-lg font-semibold text-foreground">{priceLabel}</p>
+        <CheckoutButton />
       </CardFooter>
     </Card>
   );

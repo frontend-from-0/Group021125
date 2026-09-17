@@ -9,6 +9,8 @@ model Product {
   stock       Int
   imageUrls   String[]
   isActive    Boolean
+  stripePriceId String
+  stripeProductId String
   createdAt   DateTime
   updatedAt   DateTime
 
