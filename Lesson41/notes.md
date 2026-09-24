@@ -18,7 +18,7 @@ Node.js
 
 
 ## Express
-A library/framework running on Node that makes creating HTTP servers and APIs much easier.
+A framework running on Node that makes creating HTTP servers and APIs much easier.
 
 Node itself can do this:
 ```JS
