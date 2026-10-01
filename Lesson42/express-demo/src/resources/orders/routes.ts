@@ -7,13 +7,15 @@ const router = Router();
 /**
  * TODO (Student exercise): Add `checkJwt` and implement `getMyOrders`.
  */
-router.get('/', getMyOrders);
+router.get('/', checkJwt, getMyOrders);
 
 router.get('/all', checkJwt, requireAdmin, listAll);
 
 /**
  * TODO (Student exercise): Add `checkJwt` and implement `getOneById`.
  */
-router.get('/:id', getOneById);
+router.get('/:id', checkJwt, getOneById);
+
+
 
 export { router as ordersRouter };

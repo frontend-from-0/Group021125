@@ -23,9 +23,18 @@ import { getAllOrders, getOrderById, getOrdersByUserId } from './store';
  * 5. Return the orders as JSON with status 200
  */
 const getMyOrders = async (req: Request, res: Response, _next: NextFunction) => {
-  res.status(501).json({ error: 'Not implemented — student exercise' });
-};
 
+  const userId = req.auth?.payload?.sub;
+
+  if(!userId){
+   
+    res.status(401).json({ error: 'Unauthorized — missing user identity' });
+   
+  }
+  const orders = getOrdersByUserId(userId as string);
+  res.status(200).json(orders);
+  
+}
 /**
  * GET /v1/orders/:id
  *
@@ -42,7 +51,25 @@ const getMyOrders = async (req: Request, res: Response, _next: NextFunction) => 
  * 6. Return the order as JSON with status 200
  */
 const getOneById = async (req: Request, res: Response, _next: NextFunction) => {
-  res.status(501).json({ error: 'Not implemented — student exercise' });
+  const userId = req.auth?.payload?.sub;
+
+  if(!userId){
+   
+    res.status(401).json({ error: 'Unauthorized — missing user identity' });
+   
+  }
+  
+  const id = req.params.id;
+  const order = getOrderById(id);
+  if(!order){
+    res.status(404).json({ error: 'Order is not found' })
+  }
+  if(order?.userId !== userId)
+  {
+    res.status(404).json({ error: 'Forbidden' })
+  }
+  res.status(200).json(order);
+
 };
 
 /**

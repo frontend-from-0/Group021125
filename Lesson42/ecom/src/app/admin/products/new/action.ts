@@ -59,6 +59,7 @@ export async function createProduct(
   _prevState: CreateProductState | null,
   formData: FormData,
 ): Promise<CreateProductState> {
+  // TODO: auth check is missing!!!!
   const values = parseFormValues(formData);
 
   const parsed = createProductFormSchema.safeParse(values);

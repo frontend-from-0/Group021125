@@ -5,26 +5,34 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { callOrdersApi, type OrdersApiTestResult } from "./actions";
+import { fetchAllOrders, fetchMyOrders, fetchOrderById } from "./actions";
 
 export function OrdersApiTester() {
   const [orderId, setOrderId] = useState("");
-  const [result, setResult] = useState<OrdersApiTestResult | null>(null);
+  const [result, setResult] = useState<unknown>(null);
   const [isPending, startTransition] = useTransition();
-
-  function run(kind: "my-orders" | "all-orders" | "order-by-id") {
-    startTransition(async () => {
-      setResult(await callOrdersApi({ kind, orderId }));
-    });
-  }
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        <Button disabled={isPending} onClick={() => run("my-orders")}>
+        <Button
+          disabled={isPending}
+          onClick={() =>
+            startTransition(async () => {
+              setResult(await fetchMyOrders());
+            })
+          }
+        >
           GET /v1/orders
         </Button>
-        <Button disabled={isPending} onClick={() => run("all-orders")}>
+        <Button
+          disabled={isPending}
+          onClick={() =>
+            startTransition(async () => {
+              setResult(await fetchAllOrders());
+            })
+          }
+        >
           GET /v1/orders/all
         </Button>
       </div>
@@ -37,7 +45,11 @@ export function OrdersApiTester() {
         />
         <Button
           disabled={isPending || orderId.trim().length === 0}
-          onClick={() => run("order-by-id")}
+          onClick={() =>
+            startTransition(async () => {
+              setResult(await fetchOrderById(orderId.trim()));
+            })
+          }
         >
           GET /v1/orders/:id
         </Button>
