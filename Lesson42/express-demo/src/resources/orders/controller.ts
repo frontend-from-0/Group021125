@@ -48,12 +48,10 @@ const getOneById = async (req: Request, res: Response, _next: NextFunction) => {
 };
 
 /**
- * GET /v1/orders/all (admin/debug route)
+ * GET /v1/orders/all — requires `read:orders` scope.
  *
- * TODO (Optional student exercise): Make this an admin-only route.
- *
- * For now, it returns all orders (useful for debugging during class).
- * In production, you would check for an admin role in the JWT claims.
+ * Protected by checkScopes('read:orders') in routes.ts.
+ * Returns all orders (useful for admin dashboards or debugging).
  */
 const listAll = async (_req: Request, res: Response, _next: NextFunction) => {
   const orders = getAllOrders();

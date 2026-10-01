@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { checkJwt } from '../../common/auth';
+import { checkJwt, checkScopes } from '../../common/auth';
 import { getMyOrders, getOneById, listAll } from './controller';
 
 const router = Router();
@@ -11,15 +11,23 @@ const router = Router();
  * These routes provide read-only access to orders.
  *
  * To call these routes from Next.js (Auth0 v4 SDK):
- *   const { accessToken } = await getAccessToken({ audience: 'YOUR_API_IDENTIFIER' });
+ *   const { token } = await getAccessToken({ audience: 'YOUR_API_IDENTIFIER' });
  *   fetch('http://localhost:8000/v1/orders', {
- *     headers: { Authorization: `Bearer ${accessToken}` },
+ *     headers: { Authorization: `Bearer ${token}` },
  *   });
  */
 
 router.get('/', checkJwt, getMyOrders);
 
-router.get('/all', checkJwt, listAll);
+/**
+ * GET /v1/orders/all — requires `read:orders` scope.
+ *
+ * This demonstrates scope-based authorization with Auth0:
+ * - The `read:orders` permission must be defined on your Auth0 API
+ * - The client must request this scope when getting the access token
+ * - In Next.js: getAccessToken({ audience: '...', scope: 'read:orders' })
+ */
+router.get('/all', checkJwt, checkScopes('read:orders'), listAll);
 
 /**
  * TODO (Student exercise): This route stub is protected but not implemented.

@@ -55,12 +55,13 @@ This Express API is the **resource server**. The Next.js app (using Auth0 v4 SDK
 import { getAccessToken } from '@auth0/nextjs-auth0';
 
 export async function getServerSideProps(context) {
-  const { accessToken } = await getAccessToken(context.req, context.res, {
+  // Auth0 v4 returns { token } (not { accessToken })
+  const { token } = await getAccessToken(context.req, context.res, {
     audience: 'https://orders.example.com', // Your API identifier
   });
 
   const res = await fetch('http://localhost:8000/v1/orders', {
-    headers: { Authorization: `Bearer ${accessToken}` },
+    headers: { Authorization: `Bearer ${token}` },
   });
   const orders = await res.json();
 
@@ -89,7 +90,7 @@ Copy `.env.example` → `.env` and fill in:
 |----------|-----------------|
 | `STRIPE_SECRET_KEY` | [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys) → Secret key |
 | `STRIPE_WEBHOOK_SECRET` | Stripe CLI: `stripe listen --forward-to localhost:8000/v1/stripe/webhooks` prints `whsec_...` |
-| `AUTH0_ISSUER_BASE_URL` | Your Auth0 tenant URL, e.g. `https://your-tenant.auth0.com` |
+| `AUTH0_DOMAIN` | Your Auth0 tenant domain, e.g. `your-tenant.auth0.com` (without `https://`) |
 | `AUTH0_AUDIENCE` | The API identifier you created in Auth0 Dashboard |
 
 ---
@@ -123,7 +124,7 @@ stripe trigger checkout.session.completed
 | POST | `/v1/stripe/webhooks` | Stripe signature | Receives Stripe events |
 | GET | `/v1/orders` | JWT (checkJwt) | List orders for authenticated user |
 | GET | `/v1/orders/:id` | JWT (checkJwt) | **TODO** — Get one order by ID |
-| GET | `/v1/orders/all` | JWT (checkJwt) | Debug: list all orders |
+| GET | `/v1/orders/all` | JWT + `read:orders` scope | List all orders (scopes example) |
 | GET | `/` | None | Health check |
 
 ---

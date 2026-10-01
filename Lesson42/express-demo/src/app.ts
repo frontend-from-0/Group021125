@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import routes from './common/routes';
 import unknownEndpoint from './middlewares/unknownEndpoint';
+import { authErrorHandler } from './middlewares/authErrorHandler';
 import { receiveUpdates } from './resources/webhooks/controller';
 
 import './common/env';
@@ -37,6 +38,9 @@ app.get('/', (_req: Request, res: Response) => {
 app.use('/v1/', routes);
 
 app.use('*', unknownEndpoint);
+
+// Auth0 error handler — returns clear JSON for 401/403 errors
+app.use(authErrorHandler);
 
 export default app;
 
