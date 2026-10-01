@@ -12,6 +12,7 @@ import logger from '../../common/logger';
  */
 const receiveUpdates = async (request: Request, response: Response, _next: NextFunction) => {
   let event: Stripe.Event;
+  logger.info('receiveUpdates');
 
   if (STRIPE_ENDPOINT_SECRET) {
     const signature = request.headers['stripe-signature'];

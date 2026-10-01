@@ -19,21 +19,32 @@
 |-----------|-------------|
 | **Webhook route** | `POST /v1/stripe/webhooks` receives Stripe events (signature verified) |
 | **Order creation** | `checkout.session.completed` → upserts order in memory store |
-| **Auth middleware** | `checkJwt` from `express-oauth2-jwt-bearer` protects `/v1/orders/*` |
-| **GET /v1/orders** | Returns orders for the authenticated user (by `sub` claim) |
+| **Auth middleware** | `checkJwt` from `express-oauth2-jwt-bearer` is ready to protect orders routes |
+| **GET /v1/orders/all** | Admin-only list of all orders |
 
 ---
 
-## Student TODO (Live Coding)
+## TODO (Live Coding)
 
-Complete the **`GET /v1/orders/:id`** endpoint in `src/resources/orders/controller.ts`:
+Complete both stubs in `src/resources/orders/controller.ts` and add `checkJwt` in `src/resources/orders/routes.ts`.
 
-1. Extract `id` from `req.params.id`
-2. Call `getOrderById(id)` to fetch the order
-3. Return 404 if not found
-4. Verify the order belongs to the authenticated user (`order.userId === req.auth.payload.sub`)
-5. Return 403 if user doesn't own the order
-6. Return the order as JSON
+### `GET /v1/orders`
+
+1. Protect the route with `checkJwt`
+2. Read the user id from `req.auth.payload.sub`
+3. Return 401 if it is missing
+4. Call `getOrdersByUserId(userId)`
+5. Return the orders as JSON
+
+### `GET /v1/orders/:id`
+
+1. Protect the route with `checkJwt`
+2. Extract `id` from `req.params.id`
+3. Call `getOrderById(id)` to fetch the order
+4. Return 404 if not found
+5. Verify the order belongs to the authenticated user (`order.userId === req.auth.payload.sub`)
+6. Return 403 if the user doesn't own the order
+7. Return the order as JSON
 
 ---
 
@@ -122,9 +133,9 @@ stripe trigger checkout.session.completed
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
 | POST | `/v1/stripe/webhooks` | Stripe signature | Receives Stripe events |
-| GET | `/v1/orders` | JWT (checkJwt) | List orders for authenticated user |
+| GET | `/v1/orders` | JWT (checkJwt) | **TODO** — List orders for authenticated user |
 | GET | `/v1/orders/:id` | JWT (checkJwt) | **TODO** — Get one order by ID |
-| GET | `/v1/orders/all` | JWT + `read:orders` scope | List all orders (scopes example) |
+| GET | `/v1/orders/all` | JWT + admin role | List all orders |
 | GET | `/` | None | Health check |
 
 ---

@@ -25,7 +25,7 @@ app.use(
 // IMPORTANT: Stripe webhook route MUST come BEFORE express.json() middleware.
 // Stripe signature verification requires the raw request body.
 // See: https://github.com/stripe/stripe-node/issues/341
-app.post('/v1/stripe/webhooks', express.raw({ type: 'application/json' }), receiveUpdates);
+app.post('/v1/stripe/webhook', express.raw({ type: 'application/json' }), receiveUpdates);
 
 app.use(express.json());
 
@@ -39,7 +39,7 @@ app.use('/v1/', routes);
 
 app.use('*', unknownEndpoint);
 
-// Auth0 error handler — returns clear JSON for 401/403 errors
+// Auth0 error handler — returns JSON for JWT 401s from checkJwt
 app.use(authErrorHandler);
 
 export default app;

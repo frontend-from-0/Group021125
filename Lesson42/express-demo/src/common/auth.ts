@@ -1,5 +1,9 @@
-import { auth, requiredScopes } from 'express-oauth2-jwt-bearer';
+import { Request, Response, NextFunction } from 'express';
+import { auth } from 'express-oauth2-jwt-bearer';
 import './env';
+
+const ROLES_CLAIM = 'https://pyp-admin/roles';
+const ADMIN_ROLE = 'admin';
 
 /**
  * Auth0 JWT middleware for Express.
@@ -12,9 +16,9 @@ import './env';
  *   AUTH0_AUDIENCE — the API identifier you registered in Auth0
  *
  * Usage:
- *   import { checkJwt, checkScopes } from './common/auth';
+ *   import { checkJwt, requireAdmin } from './common/auth';
  *   router.get('/protected', checkJwt, handler);
- *   router.get('/admin', checkJwt, checkScopes('read:admin'), handler);
+ *   router.get('/admin-only', checkJwt, requireAdmin, handler);
  *
  * The middleware validates the JWT signature and claims. On success it
  * populates `req.auth` with the token payload (including `sub` — the user id).
@@ -28,10 +32,16 @@ export const checkJwt = auth({
   audience: process.env.AUTH0_AUDIENCE,
 });
 
-/**
- * Scope-checking middleware — use after checkJwt.
- *
- * Example: checkScopes('read:orders') requires the token to have that scope.
- * The scope/permission must exist on the Auth0 API and be requested by the client.
- */
-export const checkScopes = requiredScopes;
+function getRoles(req: Request): string[] {
+  const value = req.auth?.payload?.[ROLES_CLAIM];
+  if (!Array.isArray(value)) return [];
+  return value.filter((role): role is string => typeof role === 'string');
+}
+
+/** Use after checkJwt. Requires the Auth0 `admin` role on the access token. */
+export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (!getRoles(req).includes(ADMIN_ROLE)) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  return next();
+};

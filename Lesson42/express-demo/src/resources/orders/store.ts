@@ -5,6 +5,8 @@
  * is received. Orders are keyed by `checkoutSessionId` to allow upsert behavior.
  */
 
+import logger from "../../common/logger";
+
 export interface Order {
   id: string;
   checkoutSessionId: string;
@@ -28,6 +30,7 @@ export const createOrder = (data: Omit<Order, 'id' | 'createdAt'>): Order => {
     createdAt: new Date(),
   };
   orders.set(data.checkoutSessionId, order);
+  logger.info(`Order created: ${order.id}`);
   return order;
 };
 
