@@ -5,15 +5,15 @@ import { getMyOrders, getOneById, listAll } from './controller';
 const router = Router();
 
 /**
- * TODO (Student exercise): Add `checkJwt` and implement `getMyOrders`.
+ * SOLUTION: checkJwt added — validates Auth0 JWT and populates req.auth.payload.sub
  */
-router.get('/', getMyOrders);
+router.get('/', checkJwt, getMyOrders);
 
 router.get('/all', checkJwt, requireAdmin, listAll);
 
 /**
- * TODO (Student exercise): Add `checkJwt` and implement `getOneById`.
+ * SOLUTION: checkJwt added — validates Auth0 JWT and populates req.auth.payload.sub
  */
-router.get('/:id', getOneById);
+router.get('/:id', checkJwt, getOneById);
 
 export { router as ordersRouter };

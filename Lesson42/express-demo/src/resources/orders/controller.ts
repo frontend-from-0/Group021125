@@ -13,26 +13,33 @@ import { getAllOrders, getOrderById, getOrdersByUserId } from './store';
 /**
  * GET /v1/orders
  *
- * TODO (Student exercise): Implement this endpoint.
+ * SOLUTION (Instructor answer key)
  *
  * Requirements:
- * 1. Protect the route with `checkJwt` in routes.ts
+ * 1. Protect the route with `checkJwt` in routes.ts ✓
  * 2. Read the user id from `req.auth?.payload?.sub`
  * 3. If it is missing, return 401 with { error: 'Unauthorized — missing user identity' }
  * 4. Use `getOrdersByUserId(userId)` to fetch that user's orders
  * 5. Return the orders as JSON with status 200
  */
 const getMyOrders = async (req: Request, res: Response, _next: NextFunction) => {
-  res.status(501).json({ error: 'Not implemented — student exercise' });
+  const userId = req.auth?.payload?.sub;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized — missing user identity' });
+  }
+
+  const orders = getOrdersByUserId(userId);
+  return res.status(200).json(orders);
 };
 
 /**
  * GET /v1/orders/:id
  *
- * TODO (Student exercise): Implement this endpoint.
+ * SOLUTION (Instructor answer key)
  *
  * Requirements:
- * 1. Protect the route with `checkJwt` in routes.ts
+ * 1. Protect the route with `checkJwt` in routes.ts ✓
  * 2. Extract the order `id` from `req.params.id`
  * 3. Use `getOrderById(id)` to fetch the order from the store
  * 4. If no order is found, return 404 with { error: 'Order not found' }
@@ -42,7 +49,19 @@ const getMyOrders = async (req: Request, res: Response, _next: NextFunction) => 
  * 6. Return the order as JSON with status 200
  */
 const getOneById = async (req: Request, res: Response, _next: NextFunction) => {
-  res.status(501).json({ error: 'Not implemented — student exercise' });
+  const { id } = req.params;
+  const order = getOrderById(id);
+
+  if (!order) {
+    return res.status(404).json({ error: 'Order not found' });
+  }
+
+  const userId = req.auth?.payload?.sub;
+  if (order.userId !== userId) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
+  return res.status(200).json(order);
 };
 
 /**
