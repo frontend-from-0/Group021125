@@ -1,14 +1,13 @@
-import { Router } from 'express'
+import { Router } from 'express';
+import { ordersRouter } from '../resources/orders/routes';
 
-const router: Router = Router()
+const router: Router = Router();
 
-// import routes
-import userRouter from '../resources/users/routes'
-import productRouter from '../resources/products/routes'
+// Orders routes (protected by Auth0 checkJwt middleware)
+router.use('/orders', ordersRouter);
 
-// Higher level routes definition
-router.use('/users', userRouter)
-router.use('/products', productRouter)
+// NOTE: Users and products live in the Next.js app (Auth0 v4 + your DB).
+// This Express API only handles Stripe webhooks and order retrieval.
 
+export default router;
 
-export default router

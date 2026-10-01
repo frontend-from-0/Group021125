@@ -1,124 +1,135 @@
-# Create Express TypeScript Starter
+# Lesson 42 — Stripe Webhooks & Protected Orders API
 
-Create Express TypeScript Starter is a boilerplate project designed to help you quickly set up a new Express.js project with TypeScript. It includes pre-configured settings and dependencies for a seamless development experience.
+**Topic:** Stripe webhooks with `checkout.session.completed` → create orders  
+**Auth:** Express API protected with Auth0 (`express-oauth2-jwt-bearer`)
 
-## Table of Contents
+---
 
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Customization](#customization)
-- [Custom Folder Structure](#custom-folder-structure)
-- [Features](#features)
-- [Contributing](#contributing)
-- [Credits](#credits)
-- [License](#license)
+## Classroom Goals
 
+1. **Understand Stripe webhooks** — how Stripe notifies your backend when payments complete
+2. **See Auth0 JWT protection on Express** — the `checkJwt` middleware validates tokens
+3. **Build orders endpoints** (student exercise) — complete the TODO stubs
 
-## Getting Started
+---
 
-To get started with Create Express TypeScript Starter, follow these steps:
+## What's Already Wired (Starter Code)
 
-1. Use `npx` to create a new project based on the starter:
+| Component | Description |
+|-----------|-------------|
+| **Webhook route** | `POST /v1/stripe/webhooks` receives Stripe events (signature verified) |
+| **Order creation** | `checkout.session.completed` → upserts order in memory store |
+| **Auth middleware** | `checkJwt` from `express-oauth2-jwt-bearer` protects `/v1/orders/*` |
+| **GET /v1/orders** | Returns orders for the authenticated user (by `sub` claim) |
 
-   ```sh
-   npx @easy-starters/create-express-ts-starter your_project_name
-   ```
-   This command will create a new directory with the specified name (your_repo_name), set up the project inside it, and install all the dependencies.
-2. Navigate into the newly created directory:
+---
 
-   ```sh
-   cd your_project_name
-   ```
-3. Change some values in package.json to meet your project needs. You can modify the project name, description, author, and other configurations as necessary.
-4. Create `.env` file using the provided example in `.env.example`.
-5. Customize the README file to provide information specific to your project.
-6. Start the development server:
+## Student TODO (Live Coding)
 
-   ```sh
-   npm run dev
-   ```
+Complete the **`GET /v1/orders/:id`** endpoint in `src/resources/orders/controller.ts`:
 
+1. Extract `id` from `req.params.id`
+2. Call `getOrderById(id)` to fetch the order
+3. Return 404 if not found
+4. Verify the order belongs to the authenticated user (`order.userId === req.auth.payload.sub`)
+5. Return 403 if user doesn't own the order
+6. Return the order as JSON
 
+---
 
-## Usage
+## Auth0 Integration: Next.js → Express API
 
-After setting up your project, you can use the provided scripts and configuration to start developing your Express application. Here are the scripts below:
+This Express API is the **resource server**. The Next.js app (using Auth0 v4 SDK) is the client.
 
-- **`npm run dev`:**  Start the development server with hot reloading.
+### In Auth0 Dashboard
 
-- **`npm run start`:**  Run the production build of the project.
+1. Create an **API** (APIs → Create API)
+   - Name: e.g. "Orders API"
+   - Identifier: e.g. `https://orders.example.com` ← this is your `AUTH0_AUDIENCE`
+2. Your Next.js app should already have an Auth0 Application configured
 
-- **`npm run test`:**  Run all tests.
+### In Next.js (Auth0 v4 SDK)
 
-- **`npm run test-coverage`:**  Run all tests and generate code coverage report.
+```ts
+// Get an access token for the Express API
+import { getAccessToken } from '@auth0/nextjs-auth0';
 
-- **`npm run debug-test`:**  Run tests in debug mode with detection of open handles.
+export async function getServerSideProps(context) {
+  const { accessToken } = await getAccessToken(context.req, context.res, {
+    audience: 'https://orders.example.com', // Your API identifier
+  });
 
-- **`npm run debug-test-coverage`:**  Run tests in debug mode with detection of open handles and generate code coverage report.
+  const res = await fetch('http://localhost:8000/v1/orders', {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const orders = await res.json();
 
-- **`npm run lint`:**  Run ESLint to lint TypeScript files.
+  return { props: { orders } };
+}
+```
 
-- **`npm run lint:fix`:**  Run ESLint to lint TypeScript files and automatically fix fixable issues.
+### In This Express API
 
-- **`npm run build`:**  Build the project for production.
+The `checkJwt` middleware (in `src/common/auth.ts`) validates the token:
 
-- **`npm run prettier-watch`:**  Automatically format TypeScript files using Prettier on file change.
+```ts
+import { checkJwt } from '../../common/auth';
 
-- **`npm run prettier:fix`:**  Format all TypeScript files using Prettier.
+router.get('/orders', checkJwt, getMyOrders);
+// req.auth.payload.sub contains the user's Auth0 ID
+```
 
-- **`npm run prepare`:**  Trigger Husky to set up Git hooks.
+---
 
+## Environment Variables
 
-## Customization
+Copy `.env.example` → `.env` and fill in:
 
-Create Express TypeScript Starter can be customized to fit your specific requirements. You can modify configuration files, add or remove features, and integrate additional libraries or tools as needed.
+| Variable | Where to get it |
+|----------|-----------------|
+| `STRIPE_SECRET_KEY` | [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys) → Secret key |
+| `STRIPE_WEBHOOK_SECRET` | Stripe CLI: `stripe listen --forward-to localhost:8000/v1/stripe/webhooks` prints `whsec_...` |
+| `AUTH0_ISSUER_BASE_URL` | Your Auth0 tenant URL, e.g. `https://your-tenant.auth0.com` |
+| `AUTH0_AUDIENCE` | The API identifier you created in Auth0 Dashboard |
 
-## Custom Folder Structure
+---
 
-The project follows a customized folder structure to organize its source code and resources efficiently. Here's an overview of the folder structure:
+## Running Locally
 
-- **src/common/**: Contains common files and utilities used across the project, such as `env.ts` for managing environment variables and `logger.ts` for logging.
-- **src/resources/**: Contains resources organized by domain, with each resource folder containing `model.ts`, `interface.ts`, `controller.ts`, and `routes.ts` files for that specific resource.
-- **src/middlewares/**: Contains middleware functions used in the Express application.
-- **src/services/**: Contains configuration files and other service-related modules used in the project.
-- **src/server.ts**: Entry point for the Express server.
-- **src/app.ts**: Defines the Express application.
+```bash
+npm install
+npm run dev
+```
 
-### Additional Files
+In another terminal, forward Stripe events:
 
-- **.env.example**: Example environment variables file.
-- **.gitignore**: Git ignore rules.
-- **jest.config.js**: Jest configuration file.
-- **package.json**: Node.js dependencies and scripts.
-- **README.md**: Project documentation.
-- **tsconfig.json**: TypeScript configuration file.
+```bash
+stripe listen --forward-to localhost:8000/v1/stripe/webhooks
+# Copy the webhook signing secret (whsec_...) to .env
+```
 
-This folder structure provides a clear organization for the project's source code and resources, making it easier to navigate and maintain as the project grows.
+Trigger a test payment to see an order created:
 
-## Features
+```bash
+stripe trigger checkout.session.completed
+```
 
-- **TypeScript Support:** Write your Express application using TypeScript for enhanced type safety and developer productivity.
-- **Express.js Integration:** Utilize the powerful features of Express.js to build robust and scalable web applications.
-- **Mongoose Integration:** Seamlessly connect your Express application to MongoDB databases using Mongoose for data modeling and interaction.
-- **Pino Logging:** Benefit from fast and efficient logging with Pino, a low-overhead Node.js logger.
-- **Jest Testing:** Write and run tests for your application using Jest, a delightful JavaScript testing framework.
-- **Nodemon Development:** Use Nodemon for automatic server restarts during development for a smooth development experience.
-- **Prettier Formatting:** Maintain consistent code style and formatting with Prettier, an opinionated code formatter.
-- **Husky Git Hooks:** Enforce code quality and standards with Husky pre-commit hooks for linting and formatting checks.
-- **GitHub Actions CI:** Set up continuous integration with GitHub Actions to automate testing and deployment workflows.
+---
 
+## API Endpoints
 
-## Contributing
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | `/v1/stripe/webhooks` | Stripe signature | Receives Stripe events |
+| GET | `/v1/orders` | JWT (checkJwt) | List orders for authenticated user |
+| GET | `/v1/orders/:id` | JWT (checkJwt) | **TODO** — Get one order by ID |
+| GET | `/v1/orders/all` | JWT (checkJwt) | Debug: list all orders |
+| GET | `/` | None | Health check |
 
-Contributions to Create Express TypeScript Starter are welcome! To contribute, please follow these steps:
+---
 
-1. Fork the repository and create a new branch.
-2. Make your changes and ensure that the code passes all tests.
-3. Submit a pull request with a clear description of the changes you've made.
-   
-## Credits
+## Notes
 
-Create Express TypeScript Starter was created by [Wubshet Zeleke](https://linkedin.com/in/wubshet-zeleke) and is maintained by the open-source community.
-
-## License
-Create Express TypeScript Starter is licensed under the MIT License.
+- **Orders are created by webhooks**, not by POST requests. When Stripe sends `checkout.session.completed`, we create an order in the in-memory store.
+- **Users/products** are managed in the Next.js app, not here. This API only handles webhooks and order retrieval.
+- **In-memory store** resets on server restart (fine for class demo; use a real DB in production).

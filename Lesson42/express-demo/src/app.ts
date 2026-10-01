@@ -4,13 +4,12 @@ import helmet from 'helmet';
 import compression from 'compression';
 import routes from './common/routes';
 import unknownEndpoint from './middlewares/unknownEndpoint';
+import { receiveUpdates } from './resources/webhooks/controller';
 
-// to use env variables
 import './common/env';
 
 const app: Application = express();
 
-// middleware
 app.disable('x-powered-by');
 app.use(cors());
 app.use(helmet());
@@ -21,13 +20,15 @@ app.use(
     limit: process.env.REQUEST_LIMIT || '100kb',
   }),
 );
-// See Github Issue here: https://github.com/stripe/stripe-node/issues/341
-// app.post('/v1/stripe/webhooks', express.raw({ type: 'application/json' }), webhooksController.receiveUpdates);
+
+// IMPORTANT: Stripe webhook route MUST come BEFORE express.json() middleware.
+// Stripe signature verification requires the raw request body.
+// See: https://github.com/stripe/stripe-node/issues/341
+app.post('/v1/stripe/webhooks', express.raw({ type: 'application/json' }), receiveUpdates);
 
 app.use(express.json());
 
-// health check
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (_req: Request, res: Response) => {
   res.status(200).json({
     'health-check': 'OK: top level api working',
   });
@@ -35,7 +36,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/v1/', routes);
 
-// Handle unknown endpoints
 app.use('*', unknownEndpoint);
 
 export default app;
+
