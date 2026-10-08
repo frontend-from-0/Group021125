@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.22.0",
-    "@prisma/orm-mongo": "^8.0.0-rc.9",
+    "@prisma/orm-mongo": "^8.0.0-rc.17",
     "@stripe/stripe-js": "^9.16.0",
     "@vercel/blob": "^2.8.0",
     "class-variance-authority": "^0.7.1",
@@ -39,7 +39,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
-    "prisma": "^8.0.0-rc.10",
+    "prisma": "^8.0.0-rc.21",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

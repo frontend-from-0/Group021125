@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Stripe from 'stripe';
 import { STRIPE_ENDPOINT_SECRET, stripe } from '../../common/stripe';
-import { upsertOrder, markOrderExpired } from '../orders/store';
+import { createOrder, OrderStatus, updateOrder } from '../orders/store';
 import logger from '../../common/logger';
 
 /**
@@ -34,32 +34,48 @@ const receiveUpdates = async (request: Request, response: Response) => {
     logger.warn('No STRIPE_WEBHOOK_SECRET set — skipping signature verification (not safe for production)');
   }
 
-  switch (event.type) {
-    case 'checkout.session.completed': {
-      const session = event.data.object as Stripe.Checkout.Session;
-      logger.info(`checkout.session.completed — session ${session.id}`);
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        logger.info(`checkout.session.completed — session ${session.id}`);
 
-      const order = upsertOrder(session.id, {
-        userId: (session.metadata?.userId as string) ?? 'google-oauth2|115099880114970704071',
-        customerEmail: session.customer_details?.email ?? null,
-        amountTotal: session.amount_total,
-        currency: session.currency,
-        status: 'paid',
-      });
+        const userId = session.metadata?.userId;
+        if (!userId) {
+          throw new Error(`Checkout session ${session.id} is missing userId`);
+        }
 
-      logger.info(`Order created/updated: ${order.id}`);
-      break;
+        const order = await createOrder({
+          userId,
+          checkoutSessionId: session.id,
+          status: OrderStatus.PENDING,
+          // Address should be passed as metadata through the checkout session instead
+          address: {
+            line1: 'Street 1',
+            city: 'My city',
+            postalCode: '42233',
+            country: 'Sweden',
+          },
+        });
+
+        logger.info(`Order created: ${order.id}`);
+        break;
+      }
+
+      case 'checkout.session.expired': {
+        const session = event.data.object as Stripe.Checkout.Session;
+        logger.info(`checkout.session.expired — session ${session.id}`);
+        updateOrder(session.id, OrderStatus.EXPIRED);
+        break;
+      }
+
+      default:
+        logger.info(`Unhandled event type: ${event.type}`);
     }
-
-    case 'checkout.session.expired': {
-      const session = event.data.object as Stripe.Checkout.Session;
-      logger.info(`checkout.session.expired — session ${session.id}`);
-      markOrderExpired(session.id);
-      break;
-    }
-
-    default:
-      logger.info(`Unhandled event type: ${event.type}`);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    logger.error(`Webhook persistence failed: ${message}`);
+    return response.sendStatus(500);
   }
 
   response.sendStatus(200);

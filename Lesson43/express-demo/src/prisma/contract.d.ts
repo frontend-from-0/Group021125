@@ -18,7 +18,7 @@ import type {
 } from '@prisma/orm-mongo/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'32b632de4b7b126d33c803a95aca9f66c2c6e77e01a08bd8cfa9646bd32e7881'>;
+  StorageHashBase<'59443ad1ebfa6cf1dc75d69682bd6b9e7ff7752b1a90da7137283ffb0118c839'>;
 export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'251b3ce23f6c9f561892e7c1af9d2cc941a13d64ba1aa7226b90036b09568cc3'>;
@@ -45,7 +45,14 @@ export type FieldOutputTypes = {
       readonly checkoutSessionId: CodecTypes['mongo/string@1']['output'];
       readonly createdAt: CodecTypes['mongo/date@1']['output'];
       readonly status:
-        'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'RETURNED' | 'REFUNDED';
+        | 'PENDING'
+        | 'PROCESSING'
+        | 'SHIPPED'
+        | 'DELIVERED'
+        | 'CANCELLED'
+        | 'RETURNED'
+        | 'REFUNDED'
+        | 'EXPIRED';
       readonly updatedAt: CodecTypes['mongo/date@1']['output'];
       readonly userId: CodecTypes['mongo/objectId@1']['output'];
     };
@@ -94,7 +101,14 @@ export type FieldInputTypes = {
       readonly checkoutSessionId: CodecTypes['mongo/string@1']['input'];
       readonly createdAt: CodecTypes['mongo/date@1']['input'];
       readonly status:
-        'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'RETURNED' | 'REFUNDED';
+        | 'PENDING'
+        | 'PROCESSING'
+        | 'SHIPPED'
+        | 'DELIVERED'
+        | 'CANCELLED'
+        | 'RETURNED'
+        | 'REFUNDED'
+        | 'EXPIRED';
       readonly updatedAt: CodecTypes['mongo/date@1']['input'];
       readonly userId: CodecTypes['mongo/objectId@1']['input'];
     };
@@ -143,7 +157,14 @@ export namespace Models {
     checkoutSessionId: CodecTypes['mongo/string@1']['output'];
     createdAt: CodecTypes['mongo/date@1']['output'];
     status:
-      'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'RETURNED' | 'REFUNDED';
+      | 'PENDING'
+      | 'PROCESSING'
+      | 'SHIPPED'
+      | 'DELIVERED'
+      | 'CANCELLED'
+      | 'RETURNED'
+      | 'REFUNDED'
+      | 'EXPIRED';
     updatedAt: CodecTypes['mongo/date@1']['output'];
     userId: CodecTypes['mongo/objectId@1']['output'];
     orderItems: unbound_OrderItem[];
@@ -244,6 +265,7 @@ type ContractBase = Omit<
                         'CANCELLED',
                         'RETURNED',
                         'REFUNDED',
+                        'EXPIRED',
                       ];
                     };
                     readonly updatedAt: { readonly bsonType: 'date' };
@@ -717,31 +739,9 @@ type ContractBase = Omit<
               { readonly name: 'CANCELLED'; readonly value: 'CANCELLED' },
               { readonly name: 'RETURNED'; readonly value: 'RETURNED' },
               { readonly name: 'REFUNDED'; readonly value: 'REFUNDED' },
+              { readonly name: 'EXPIRED'; readonly value: 'EXPIRED' },
             ];
           };
-        };
-        readonly enumMemberTypes?: {
-          readonly Category: readonly [
-            { readonly name: 'ELECTRONICS'; readonly value: 'ELECTRONICS' },
-            { readonly name: 'CLOTHING'; readonly value: 'CLOTHING' },
-            { readonly name: 'HOME'; readonly value: 'HOME' },
-            { readonly name: 'SPORTS'; readonly value: 'SPORTS' },
-            { readonly name: 'OTHER'; readonly value: 'OTHER' },
-          ];
-          readonly Currency: readonly [
-            { readonly name: 'EUR'; readonly value: 'EUR' },
-            { readonly name: 'GBP'; readonly value: 'GBP' },
-            { readonly name: 'TRY'; readonly value: 'TRY' },
-          ];
-          readonly OrderStatus: readonly [
-            { readonly name: 'PENDING'; readonly value: 'PENDING' },
-            { readonly name: 'PROCESSING'; readonly value: 'PROCESSING' },
-            { readonly name: 'SHIPPED'; readonly value: 'SHIPPED' },
-            { readonly name: 'DELIVERED'; readonly value: 'DELIVERED' },
-            { readonly name: 'CANCELLED'; readonly value: 'CANCELLED' },
-            { readonly name: 'RETURNED'; readonly value: 'RETURNED' },
-            { readonly name: 'REFUNDED'; readonly value: 'REFUNDED' },
-          ];
         };
       };
     };

@@ -1,77 +1,92 @@
-/**
- * In-memory order store (for classroom demo — no real database).
- *
- * Each order is created by the Stripe webhook when `checkout.session.completed`
- * is received. Orders are keyed by `checkoutSessionId` to allow upsert behavior.
- */
+import { ParseOptions } from 'querystring';
+import logger from '../../common/logger';
+import { db } from '../../prisma/db';
 
-import logger from "../../common/logger";
+export enum OrderStatus {
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  SHIPPED = 'SHIPPED',
+  DELIVERED = 'DELIVERED',
+  CANCELLED = 'CANCELLED',
+  RETURNED = 'RETURNED',
+  REFUNDED = 'REFUNDED',
+  EXPIRED = "EXPIRED",
+}
+
+export interface Address {
+  line1: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
 
 export interface Order {
   id: string;
   checkoutSessionId: string;
-  userId: string | null;
-  customerEmail: string | null;
-  amountTotal: number | null;
-  currency: string | null;
-  status: 'paid' | 'expired' | 'pending';
+  userId: string;
+  status: OrderStatus;
   createdAt: Date;
+  updatedAt: Date;
+  address: Address;
 }
 
-const orders: Map<string, Order> = new Map();
+type OrderDocument = {
+  _id: { toString(): string };
+  checkoutSessionId: string;
+  userId: string;
+  status: `${OrderStatus}`;
+  createdAt: Date;
+  updatedAt: Date;
+  address: Address;
+};
 
-let idCounter = 1;
-
-export const createOrder = (data: Omit<Order, 'id' | 'createdAt'>): Order => {
-  const id = `order_${idCounter++}`;
-  const order: Order = {
-    ...data,
-    id,
-    createdAt: new Date(),
+function toOrder(orderDoc: OrderDocument): Order {
+  return {
+    id: String(orderDoc._id),
+    checkoutSessionId: orderDoc.checkoutSessionId,
+    userId: orderDoc.userId,
+    status: orderDoc.status as OrderStatus,
+    createdAt: orderDoc.createdAt,
+    updatedAt: orderDoc.updatedAt,
+    address: orderDoc.address,
   };
-  orders.set(data.checkoutSessionId, order);
-  logger.info(`Order created: ${order.id}`);
-  return order;
+}
+
+export type NewOrder = {
+  checkoutSessionId: string;
+  userId: string;
+  status: OrderStatus;
+  address: Address;
 };
 
-export const getOrderByCheckoutSession = (checkoutSessionId: string): Order | undefined => {
-  return orders.get(checkoutSessionId);
-};
 
-export const upsertOrder = (checkoutSessionId: string, data: Partial<Omit<Order, 'id' | 'createdAt'>>): Order => {
-  const existing = orders.get(checkoutSessionId);
-  if (existing) {
-    const updated: Order = { ...existing, ...data };
-    orders.set(checkoutSessionId, updated);
-    return updated;
-  }
-  return createOrder({
-    checkoutSessionId,
-    userId: data.userId ?? null,
-    customerEmail: data.customerEmail ?? null,
-    amountTotal: data.amountTotal ?? null,
-    currency: data.currency ?? null,
-    status: data.status ?? 'pending',
+export const createOrder = async (data: NewOrder): Promise<Order> => {
+  const now = new Date();
+  const orderDoc = await db.orm.orders.create({
+    checkoutSessionId: data.checkoutSessionId,
+    userId: data.userId,
+    status: data.status,
+    createdAt: now,
+    updatedAt: now,
+    address: data.address,
   });
+
+  logger.info(`Order created: ${orderDoc._id}`);
+
+  return toOrder(orderDoc);
 };
 
-export const getAllOrders = (): Order[] => {
-  return Array.from(orders.values());
-};
+export const updateOrder = async (checkoutSessionId: string, status: OrderStatus): Promise<Order> => {
+  const orderDoc = await db.orm.orders.where({ checkoutSessionId }).update({
+    status: status,
+    updatedAt: new Date(),
+  });
 
-export const getOrderById = (id: string): Order | undefined => {
-  return Array.from(orders.values()).find((o) => o.id === id);
-};
-
-export const getOrdersByUserId = (userId: string): Order[] => {
-  return Array.from(orders.values()).filter((o) => o.userId === userId);
-};
-
-export const markOrderExpired = (checkoutSessionId: string): Order | undefined => {
-  const existing = orders.get(checkoutSessionId);
-  if (existing) {
-    existing.status = 'expired';
-    return existing;
+  if (!orderDoc) {
+    throw new Error(`No order found for checkout session ${checkoutSessionId}`);
   }
-  return undefined;
+
+  logger.info(`Order updated: ${orderDoc._id}`);
+
+  return toOrder(orderDoc);
 };

@@ -97,6 +97,10 @@
               {
                 "name": "REFUNDED",
                 "value": "REFUNDED"
+              },
+              {
+                "name": "EXPIRED",
+                "value": "EXPIRED"
               }
             ]
           }
@@ -602,7 +606,8 @@
                         "DELIVERED",
                         "CANCELLED",
                         "RETURNED",
-                        "REFUNDED"
+                        "REFUNDED",
+                        "EXPIRED"
                       ]
                     },
                     "updatedAt": {
@@ -868,7 +873,8 @@
                 "DELIVERED",
                 "CANCELLED",
                 "RETURNED",
-                "REFUNDED"
+                "REFUNDED",
+                "EXPIRED"
               ]
             }
           }
@@ -877,7 +883,7 @@
         "kind": "mongo-database"
       }
     },
-    "storageHash": "32b632de4b7b126d33c803a95aca9f66c2c6e77e01a08bd8cfa9646bd32e7881"
+    "storageHash": "59443ad1ebfa6cf1dc75d69682bd6b9e7ff7752b1a90da7137283ffb0118c839"
   },
   "capabilities": {},
   "extensions": {},

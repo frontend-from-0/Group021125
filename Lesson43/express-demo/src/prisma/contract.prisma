@@ -1,4 +1,4 @@
-// use prisma-8
+// use prisma-next
 
 enum Currency {
   EUR
@@ -22,6 +22,7 @@ enum OrderStatus {
   CANCELLED
   RETURNED
   REFUNDED
+  EXPIRED
 }
 
 type Address {
