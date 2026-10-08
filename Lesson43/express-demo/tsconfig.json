@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
       "target": "ES6",
-      "module": "commonjs",
+      "module": "preserve",
       "outDir": "./dist",
-      "moduleResolution": "node",
+      "moduleResolution": "bundler",
       "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "types": [
+        "node"
+      ]
   },
 }

@@ -1,0 +1,94 @@
+// use prisma-8
+
+type Address {
+  line1      String
+  city       String
+  postalCode String
+  country    String
+}
+
+model User {
+  id               ObjectId  @id @map("_id")
+  auth0UserId      String    @unique
+  email            String    @unique
+  emailVerified    Bool
+  firstname        String?
+  lastname         String?
+  createdAt        temporal.createdAt()
+  updatedAt        temporal.updatedAt()
+  marketingConsent Bool
+  address          Address?
+  cartId           ObjectId?
+  cart             Cart?     @relation(fields: [cartId], references: [id])
+  orders           Order[]
+
+  @@map("users")
+}
+
+model Product {
+  id                 ObjectId @id @map("_id")
+  productName        String
+  productBrand       String
+  productDescription String
+  price              Double
+  stock              Int32
+  category           String
+  images             String[]
+  createdAt          temporal.createdAt()
+  updatedAt          temporal.updatedAt()
+  stripeProductId    String   @unique
+  stripePriceId      String
+  isActive           Bool
+  cartItems          CartItem[]
+  orderItems         OrderItem[]
+
+  @@map("products")
+}
+
+model Cart {
+  id        ObjectId @id @map("_id")
+  userId    String   @unique
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+  items     CartItem[]
+  users     User[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        ObjectId @id @map("_id")
+  cartId    ObjectId
+  productId ObjectId
+  quantity  Int32
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("cart_items")
+}
+
+model Order {
+  id        ObjectId @id @map("_id")
+  userId    ObjectId
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+  status     String
+  user       User        @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        ObjectId @id @map("_id")
+  createdAt temporal.createdAt()
+  updatedAt temporal.updatedAt()
+  price     Double
+  quantity  Int32
+  orderId   ObjectId
+  productId ObjectId
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
