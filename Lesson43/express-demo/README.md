@@ -100,9 +100,10 @@ Copy `.env.example` → `.env` and fill in:
 | Variable | Where to get it |
 |----------|-----------------|
 | `STRIPE_SECRET_KEY` | [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys) → Secret key |
-| `STRIPE_WEBHOOK_SECRET` | Stripe CLI: `stripe listen --forward-to localhost:8000/v1/stripe/webhooks` prints `whsec_...` |
+| `STRIPE_WEBHOOK_SECRET` | Stripe CLI: `stripe listen --forward-to localhost:8000/v1/stripe/webhook` prints `whsec_...` |
 | `AUTH0_DOMAIN` | Your Auth0 tenant domain, e.g. `your-tenant.auth0.com` (without `https://`) |
 | `AUTH0_AUDIENCE` | The API identifier you created in Auth0 Dashboard |
+| `DATABASE_URL` | Same MongoDB 8 database as the ecom app, for example `mongodb://localhost:27017/ecom` |
 
 ---
 
@@ -116,7 +117,7 @@ npm run dev
 In another terminal, forward Stripe events:
 
 ```bash
-stripe listen --forward-to localhost:8000/v1/stripe/webhooks
+stripe listen --forward-to localhost:8000/v1/stripe/webhook
 # Copy the webhook signing secret (whsec_...) to .env
 ```
 
@@ -132,7 +133,7 @@ stripe trigger checkout.session.completed
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| POST | `/v1/stripe/webhooks` | Stripe signature | Receives Stripe events |
+| POST | `/v1/stripe/webhook` | Stripe signature | Receives Stripe events |
 | GET | `/v1/orders` | JWT (checkJwt) | **TODO** — List orders for authenticated user |
 | GET | `/v1/orders/:id` | JWT (checkJwt) | **TODO** — Get one order by ID |
 | GET | `/v1/orders/all` | JWT + admin role | List all orders |
@@ -142,6 +143,6 @@ stripe trigger checkout.session.completed
 
 ## Notes
 
-- **Orders are created by webhooks**, not by POST requests. When Stripe sends `checkout.session.completed`, we create an order in the in-memory store.
-- **Users/products** are managed in the Next.js app, not here. This API only handles webhooks and order retrieval.
-- **In-memory store** resets on server restart (fine for class demo; use a real DB in production).
+- **Orders are created by webhooks**, not by POST requests. `checkout.session.completed` upserts an order in MongoDB by `checkoutSessionId`.
+- A retried webhook updates that same document. `checkout.session.expired` does not change an order that is already `PAID`.
+- **Users and products** stay in the Next.js app. This API stores orders only.

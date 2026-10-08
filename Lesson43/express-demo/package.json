@@ -5,28 +5,32 @@
   "bin": "./bin/script.js",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "nodemon src/server.ts | npx pino-pretty",
+    "dev": "nodemon --exec tsx src/server.ts | npx pino-pretty",
     "start": "node dist/src/server.js | npx pino-pretty",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "build": "tsc -p .",
     "prettier-watch": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "prettier:fix": "prettier --write src/**/*.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "contract:emit": "prisma contract emit"
   },
   "author": "Anna S. Atalay",
   "license": "ISC",
   "dependencies": {
+    "@prisma/orm-mongo": "^8.0.0-rc.17",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "express": "^4.19.2",
     "express-oauth2-jwt-bearer": "^1.6.0",
     "helmet": "^7.1.0",
+    "mongodb": "^7.7.0",
     "pino": "^8.19.0",
     "stripe": "^22.1.0"
   },
   "devDependencies": {
+    "@prisma/cli-engine": "^0.6.3",
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
@@ -42,9 +46,11 @@
     "onchange": "^7.1.0",
     "pino-pretty": "^11.0.0",
     "prettier": "^3.2.5",
+    "prisma": "^8.0.0-rc.21",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "ts-node": "10.9.2",
-    "typescript": "5.4.3"
+    "tsx": "^4.23.15",
+    "typescript": "^5.4.3"
   }
 }
