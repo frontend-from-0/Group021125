@@ -8,7 +8,7 @@
       "model": "Product",
       "namespace": "__unbound__"
     },
-    "user": {
+    "users": {
       "model": "User",
       "namespace": "__unbound__"
     }
@@ -234,7 +234,7 @@
             },
             "relations": {},
             "storage": {
-              "collection": "user"
+              "collection": "users"
             }
           }
         }
@@ -329,7 +329,7 @@
                 "validationLevel": "strict"
               }
             },
-            "user": {
+            "users": {
               "indexes": [
                 {
                   "keys": [
@@ -431,7 +431,7 @@
         "kind": "mongo-database"
       }
     },
-    "storageHash": "fa00fe56dbbaf111dcd90bde5d036aa75b640783ff0c416f508f9d80421845b5"
+    "storageHash": "ebacd375586ae4b9610d5acdf0c681ec6cf918d03d096f9ef8a61657ad0d5a6b"
   },
   "capabilities": {},
   "extensions": {},

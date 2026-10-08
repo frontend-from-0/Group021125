@@ -17,7 +17,7 @@ import type {
 } from '@prisma/orm-mongo/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'fa00fe56dbbaf111dcd90bde5d036aa75b640783ff0c416f508f9d80421845b5'>;
+  StorageHashBase<'ebacd375586ae4b9610d5acdf0c681ec6cf918d03d096f9ef8a61657ad0d5a6b'>;
 export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'251b3ce23f6c9f561892e7c1af9d2cc941a13d64ba1aa7226b90036b09568cc3'>;
@@ -82,44 +82,6 @@ export type FieldInputTypes = {
     };
   };
 };
-
-export namespace Models {
-  export type unbound_Product = {
-    _id: CodecTypes['mongo/objectId@1']['output'];
-    name: CodecTypes['mongo/string@1']['output'];
-    description: CodecTypes['mongo/string@1']['output'];
-    priceCents: CodecTypes['mongo/int32@1']['output'];
-    currency: 'EUR' | 'GBP' | 'TRY';
-    category: 'ELECTRONICS' | 'CLOTHING' | 'HOME' | 'SPORTS' | 'OTHER';
-    stock: CodecTypes['mongo/int32@1']['output'];
-    imageUrls: ReadonlyArray<CodecTypes['mongo/string@1']['output']>;
-    priceId: CodecTypes['mongo/string@1']['output'];
-    productId: CodecTypes['mongo/string@1']['output'];
-    isActive: CodecTypes['mongo/bool@1']['output'];
-    createdAt: CodecTypes['mongo/date@1']['output'];
-    updatedAt: CodecTypes['mongo/date@1']['output'];
-    readonly [RelationKeys]?: never;
-  };
-  export type unbound_User = {
-    _id: CodecTypes['mongo/objectId@1']['output'];
-    email: CodecTypes['mongo/string@1']['output'];
-    firstName: CodecTypes['mongo/string@1']['output'] | null;
-    lastName: CodecTypes['mongo/string@1']['output'] | null;
-    profilePictureUrl: CodecTypes['mongo/string@1']['output'] | null;
-    createdAt: CodecTypes['mongo/date@1']['output'];
-    updatedAt: CodecTypes['mongo/date@1']['output'];
-    auth0_id: CodecTypes['mongo/string@1']['output'];
-    readonly [RelationKeys]?: never;
-  };
-}
-
-export declare const models: {
-  __unbound__: {
-    Product: Models.unbound_Product;
-    User: Models.unbound_User;
-  };
-};
-
 export type TypeMaps = MongoTypeMaps<CodecTypes, FieldOutputTypes, FieldInputTypes>;
 
 type ContractBase = Omit<
@@ -187,7 +149,7 @@ type ContractBase = Omit<
                 readonly validationAction: 'error';
               };
             };
-            readonly user: {
+            readonly users: {
               readonly kind: 'mongo-collection';
               readonly indexes: readonly [
                 {
@@ -243,7 +205,7 @@ type ContractBase = Omit<
       readonly namespace: '__unbound__' & NamespaceId;
       readonly model: 'Product';
     };
-    readonly user: { readonly namespace: '__unbound__' & NamespaceId; readonly model: 'User' };
+    readonly users: { readonly namespace: '__unbound__' & NamespaceId; readonly model: 'User' };
   };
   readonly domain: {
     readonly namespaces: {
@@ -344,7 +306,7 @@ type ContractBase = Omit<
               };
             };
             readonly relations: Record<string, never>;
-            readonly storage: { readonly collection: 'user' };
+            readonly storage: { readonly collection: 'users' };
           };
         };
         readonly enum: {

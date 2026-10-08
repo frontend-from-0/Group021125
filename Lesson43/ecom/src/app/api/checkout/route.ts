@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { z } from 'zod';
 
+import { getSessionUser } from '@/lib/auth0';
 import { stripe } from '@/lib/stripe';
+import { findMongoUserIdByAuth0Id } from '@/lib/users';
 
 const checkoutLineItemSchema = z.object({
   priceId: z
@@ -46,6 +48,12 @@ export async function POST(request: NextRequest) {
     origin = getAppOrigin(request, headersList.get('origin'));
     const formData = await request.formData();
     const { lineItems } = parseCheckoutFormData(formData);
+    const user = await getSessionUser();
+    const mongoUserId = user?.sub ? await findMongoUserIdByAuth0Id(user.sub) : null;
+
+    if (user?.sub && !mongoUserId) {
+      throw new Error('Signed-in user is not stored');
+    }
 
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems.map((item) => ({
@@ -58,6 +66,7 @@ export async function POST(request: NextRequest) {
       metadata: {
         someSpecialValue:
           'Very special value that I want to show to the user.',
+        ...(mongoUserId ? { userId: mongoUserId } : {}),
       },
     });
 

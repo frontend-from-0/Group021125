@@ -17,8 +17,8 @@
 
 | Component | Description |
 |-----------|-------------|
-| **Webhook route** | `POST /v1/stripe/webhook` receives Stripe events (signature verified) |
-| **Order creation** | `checkout.session.completed` → upserts order in MongoDB |
+| **Webhook route** | `POST /v1/stripe/webhooks` receives Stripe events (signature verified) |
+| **Order creation** | `checkout.session.completed` → upserts order in memory store |
 | **Auth middleware** | `checkJwt` from `express-oauth2-jwt-bearer` is ready to protect orders routes |
 | **GET /v1/orders/all** | Admin-only list of all orders |
 

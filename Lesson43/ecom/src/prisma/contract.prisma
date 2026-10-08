@@ -26,6 +26,7 @@ model User {
   createdAt         DateTime
   updatedAt         DateTime
   auth0_id          String   @unique
+  @@map("users")
 }
 
 enum Currency {
