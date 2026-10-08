@@ -1,0 +1,44 @@
+// use prisma-next
+model Product {
+  id          ObjectId @id @map("_id")
+  name        String
+  description String
+  priceCents  Int
+  currency    Currency
+  category    Category
+  stock       Int
+  imageUrls   String[]
+  priceId     String
+  productId   String
+  isActive    Boolean
+  createdAt   DateTime
+  updatedAt   DateTime
+
+  @@map("products")
+}
+
+model User {
+  id                ObjectId @id @map("_id")
+  email             String   @unique
+  firstName         String?
+  lastName          String?
+  profilePictureUrl String?
+  createdAt         DateTime
+  updatedAt         DateTime
+  auth0_id          String   @unique
+  @@map("users")
+}
+
+enum Currency {
+  EUR
+  GBP
+  TRY
+}
+
+enum Category {
+  ELECTRONICS
+  CLOTHING
+  HOME
+  SPORTS
+  OTHER
+}
