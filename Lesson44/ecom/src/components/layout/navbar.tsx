@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { Typography } from "@/components/ui/typography";
-import { getAdmin, getSessionUser } from "@/lib/auth0";
+import { getAdmin, getSessionUser } from "@/lib/auth0-utils";
 
 export async function Navbar() {
   const user = await getSessionUser();

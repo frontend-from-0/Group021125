@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { z } from 'zod';
 
-import { getSessionUser } from '@/lib/auth0';
+import { getSessionUser } from '@/lib/auth0-utils';
 import { stripe } from '@/lib/stripe';
 import { findMongoUserIdByAuth0Id } from '@/lib/users';
 
