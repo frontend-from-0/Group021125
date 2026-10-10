@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Typography } from "@/components/ui/typography";
-import { requireUser } from "@/lib/auth0";
+import { requireUser } from "@/lib/auth0-utils";
 
 export default async function ProfilePage() {
   const user = await requireUser();
