@@ -24,7 +24,9 @@ export default async function ProfilePage() {
     <main className="mx-auto w-full max-w-lg flex-1 px-4 py-10 sm:px-6">
       <Card>
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
+          <CardTitle>
+            <h1>Profile</h1>
+          </CardTitle>
           <CardDescription>Your account details from Auth0.</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center gap-4">
