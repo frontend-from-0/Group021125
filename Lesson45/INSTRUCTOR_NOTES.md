@@ -26,10 +26,12 @@ Not copied: historical `error.test.tsx.snap` (generated for the Group200825 mark
 ## Caveats to check before class
 - Students need an Auth0 test admin user (with `admin` role) and test user, and the `E2E_*` vars in `.env.local`.
 - Logged-out assertions look for the text "Log in to dev-" (Auth0 tenant name) — adjust to this cohort's Auth0 tenant.
-- `user.auth.setup.test.ts` expects a heading named "Profile", but this app's profile page renders `CardTitle` (a `div`) — that setup will fail unless the page uses a real heading or the locator changes. Admin "Products" is an `h1` (ok).
-- Jest has no `testPathIgnorePatterns`, so `npm test` will also try to run the Playwright files in `e2e/` — consider adding `testPathIgnorePatterns: ['/node_modules/', '<rootDir>/e2e/']`.
 - The workflow file lives in `Lesson45/ecom/.github/` so GitHub will not run it from this monorepo (same as history; fine as a demo).
 - `@playwright/test` 1.64 / Prisma packages warn on Node 20; use Node 22+.
+
+## Fixed on both branches (17 Oct)
+- `src/app/profile/page.tsx`: title is now `<CardTitle><h1>Profile</h1></CardTitle>`, so `user.auth.setup.test.ts`'s `getByRole("heading", { name: "Profile" })` matches. Admin "Products" was already an `h1`.
+- `jest.config.ts`: `testPathIgnorePatterns: ["/node_modules/", "<rootDir>/e2e/"]`, so `npm test` runs only the Jest unit/snapshot tests; Playwright specs run with `npx playwright test`.
 
 ## Exercises
 None prepared (Lesson 44 homework in Classroom is unit tests on the students' own NextJS e-commerce projects).
