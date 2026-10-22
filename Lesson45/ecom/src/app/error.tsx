@@ -21,7 +21,8 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
       <Typography variant="muted">
         We could not load this page. Please try again.
       </Typography>
-      <Button onClick={reset}>Try again</Button>
+      <Typography variant="muted">{error.message}</Typography>
+      <Button onClick={reset} data-testid="reset-btn">Try again</Button>
     </main>
   );
 }
