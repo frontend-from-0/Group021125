@@ -48,8 +48,15 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "setup",
+      name: "admin-setup",
       testDir: "./e2e/setup/",
+      testMatch: /\/auth\.setup\.ts$/,
+      timeout: 60_000,
+    },
+    {
+      name: "user-setup",
+      testDir: "./e2e/setup/",
+      testMatch: /\/user\.auth\.setup\.ts$/,
       timeout: 60_000,
     },
     {
@@ -59,7 +66,16 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         storageState: "e2e/.auth/admin.json",
       },
-      dependencies: ["setup"],
+      dependencies: ["admin-setup"],
+    },
+    {
+      name: "chromium-logged-in-user",
+      testDir: "./e2e/logged-in-user",
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "e2e/.auth/user.json",
+      },
+      dependencies: ["user-setup"],
     },
     {
       name: "chromium-logged-out",

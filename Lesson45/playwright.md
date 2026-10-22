@@ -291,7 +291,7 @@ Two common approaches:
 | Approach | How | Trade-off |
 | --- | --- | --- |
 | **Saved session secret** | Base64-encode `e2e/.auth/admin.json`, store as a GitHub Actions secret, restore it before `playwright test`. Refresh the secret when the session expires. | Simple; manual refresh |
-| **Programmatic login** | `globalSetup` reads `E2E_ADMIN_EMAIL` / `E2E_ADMIN_PASSWORD` from CI secrets, fills the Auth0 login form once, writes `admin.json`. | More setup; self-healing on each run |
+| **Programmatic login** | `globalSetup` reads `E2E_ADMIN_EMAIL` / `E2E_ADMIN_PASSWORD` (and `E2E_USER_EMAIL` / `E2E_USER_PASSWORD` for regular user tests) from CI secrets, fills the Auth0 login form once, writes `admin.json` / `user.json`. | More setup; self-healing on each run |
 
 Either way: use the **test user**, stub Stripe/Blob in tests, and keep session files out of git.
 
