@@ -447,4 +447,31 @@ Docs: [UI mode](https://playwright.dev/docs/test-ui-mode), [Trace viewer](https:
 - [Best practices](https://playwright.dev/docs/best-practices)
 - [CI guide](https://playwright.dev/docs/ci)
 
+---
 
+## Good flows to cover with e2e tests in this app
+
+### Logged out
+
+1. Home page loads and shows the product list.
+2. Visiting `/profile` or `/admin` while logged out redirects to the Auth0 login page.
+
+### Logged-in user (uses the user storageState)
+
+3. Profile page shows the "Profile" heading and the user's details.
+4. A regular user opening `/admin` is blocked (cannot see admin pages).
+5. Checkout: from a product, starting checkout redirects to Stripe Checkout (optionally pay with Stripe test card `4242 4242 4242 4242` and land on `/checkout/success`).
+6. Cancelled/failed payment ends up on `/checkout/error`.
+
+### Logged-in admin (uses the admin storageState)
+
+7. Admin dashboard opens, along with the products, orders and users pages (`/admin`, `/admin/products`, `/admin/orders`, `/admin/users`).
+8. Create product: fill the form, upload `e2e/fixtures/laptop2.avif`, and the new product appears in the list; submitting the empty form shows server-side validation errors.
+9. Edit that product's name/price and see the change in the list.
+10. Delete that product and confirm it is gone.
+
+### General advice
+
+- Test the critical user journeys and role/permission checks end to end; leave small details to unit tests.
+- Each test creates and cleans up its own data (e.g. 8 → 9 → 10 can run serially on one test product).
+- Don't assert on Stripe's hosted page beyond the redirect.
