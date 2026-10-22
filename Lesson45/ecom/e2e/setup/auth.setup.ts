@@ -1,9 +1,29 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { expect, test as setup, type Page } from "@playwright/test";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const authDir = path.join(__dirname, "..", ".auth");
 const authFile = path.join(authDir, "admin.json");
+
+async function assertNoAuth0CallbackError(page: Page): Promise<void> {
+  const url = new URL(page.url());
+  const error = url.searchParams.get("error");
+  if (!error) {
+    return;
+  }
+
+  const description = url.searchParams.get("error_description") ?? "unknown";
+  throw new Error(
+    [
+      "Auth0 login was denied.",
+      `error=${error}`,
+      `error_description=${description}`,
+      "Check Auth0 Actions/Rules for this app, and that E2E_ADMIN_EMAIL is allowed to log in.",
+    ].join("\n"),
+  );
+}
 
 async function completeAuth0Login(page: Page): Promise<void> {
   const email = process.env.E2E_ADMIN_EMAIL;
@@ -21,43 +41,36 @@ async function completeAuth0Login(page: Page): Promise<void> {
   }
 
   const acceptButton = page.getByRole("button", { name: "Accept" });
+  const emailInput = page.getByRole("textbox", { name: "Email address" });
+
+  await expect(acceptButton.or(emailInput)).toBeVisible({ timeout: 15_000 });
+
   if (await acceptButton.isVisible()) {
     await acceptButton.click();
-    await page.waitForURL(/localhost:4005/, { timeout: 30_000 });
-    return;
-  }
-
-  const emailInput = page.getByRole("textbox", { name: "Email address" });
-  if (await emailInput.isVisible()) {
+  } else {
     await emailInput.fill(email);
     await page.getByRole("textbox", { name: "Password" }).fill(password);
     await page.getByRole("button", { name: "Continue", exact: true }).click();
-    await page.waitForURL(/localhost:4005/, { timeout: 30_000 });
   }
+
+  await page.waitForURL(/localhost:3000/, { timeout: 30_000 });
+  await assertNoAuth0CallbackError(page);
 }
 
-setup("authenticate as admin", async ({ browser }) => {
+setup("authenticate as admin", async ({ page }) => {
   fs.mkdirSync(authDir, { recursive: true });
-
-  const context = await browser.newContext(
-    fs.existsSync(authFile) ? { storageState: authFile } : undefined,
-  );
-  const page = await context.newPage();
 
   await page.goto("/admin/products");
 
-  if (page.url().includes("auth0.com")) {
-    console.log('url includes auth0.com')
-    await completeAuth0Login(page);
-  }
+  const productsHeading = page.getByRole("heading", { name: "Products" });
+  const auth0Email = page.getByRole("textbox", { name: "Email address" });
+  const auth0Accept = page.getByRole("button", { name: "Accept" });
 
-  if (!page.url().includes("/admin/products")) {
-    console.log('url does not include /admin/products')
-    await page.goto("/admin/products");
-  }
+  await expect(productsHeading.or(auth0Email).or(auth0Accept)).toBeVisible({
+    timeout: 30_000,
+  });
 
-  if (page.url().includes("auth0.com")) {
-    console.log('url includes auth0.com 2')
+  if (!(await productsHeading.isVisible())) {
     await completeAuth0Login(page);
     await page.goto("/admin/products");
   }
@@ -68,18 +81,8 @@ setup("authenticate as admin", async ({ browser }) => {
     );
   }
 
-  if (page.url().includes("/auth/login") || page.url().includes("auth0.com")) {
-    throw new Error(
-      [
-        "Admin session is missing or expired.",
-        "Refresh it with:",
-        "  npx playwright codegen http://localhost:4005/admin/products --save-storage=e2e/.auth/admin.json",
-      ].join("\n"),
-    );
-  }
+  await expect(page).toHaveURL(/\/admin\/products/);
+  await expect(productsHeading).toBeVisible();
 
-  await expect(page.getByRole("heading", { name: "Products" })).toBeVisible();
-
-  await context.storageState({ path: authFile });
-  await context.close();
+  await page.context().storageState({ path: authFile });
 });
