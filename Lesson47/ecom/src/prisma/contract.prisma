@@ -1,0 +1,92 @@
+// use prisma-8
+
+enum Currency {
+  EUR
+  GBP
+  TRY
+}
+
+enum Category {
+  ELECTRONICS
+  CLOTHING
+  HOME
+  SPORTS
+  OTHER
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+  REFUNDED
+}
+
+type Address {
+  line1 String
+  city String
+  postalCode String
+  country String
+}
+
+model Product {
+  id          ObjectId @id @map("_id")
+  name        String
+  description String
+  priceCents  Int32
+  currency    Currency
+  category    Category
+  stock       Int32
+  imageUrls   String[]
+  priceId     String
+  productId   String
+  isActive    Boolean
+  createdAt   Date
+  updatedAt   Date
+  orderItems        OrderItem[]
+
+  @@map("products")
+}
+
+model User {
+  id                ObjectId @id @map("_id")
+  email             String   @unique
+  firstName         String?
+  lastName          String?
+  profilePictureUrl String?
+  createdAt         Date
+  updatedAt         Date
+  auth0_id          String   @unique
+  orders            Order[]
+
+  @@map("users")
+}
+model Order {
+ id                ObjectId @id @map("_id")
+ createdAt         Date
+ updatedAt         Date
+ checkoutSessionId String
+ userId            ObjectId
+ user              User         @relation(fields: [userId], references: [id])
+ status            OrderStatus
+ address           Address
+ orderItems        OrderItem[]
+ @@map("orders")
+}
+
+model OrderItem {
+ id                ObjectId @id @map("_id")
+ createdAt         Date
+ updatedAt         Date
+ priceCents        Int32
+ currency          Currency
+ quantity          Int32
+ productId         ObjectId
+ product           Product         @relation(fields: [productId], references: [id])
+ orderId           ObjectId
+ order             Order          @relation(fields: [orderId], references: [id])
+
+@@map("orders-items")
+}
