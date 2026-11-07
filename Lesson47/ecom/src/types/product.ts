@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { Currency } from "./currency";
 
 export enum ProductCategory {
@@ -73,3 +74,19 @@ export type Product = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+/** POST /api/ai/products body (Lesson 47). */
+export const productDescriptionRequestSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(2, "Enter a product name first (at least 2 characters).")
+    .max(100, "Product name can be at most 100 characters."),
+});
+
+/** Structured output we ask the AI model to return. */
+export const productDescriptionResponseSchema = z.object({
+  description: z.string().min(50).max(500),
+});
+
+export type ProductDescriptionResponse = z.infer<typeof productDescriptionResponseSchema>;

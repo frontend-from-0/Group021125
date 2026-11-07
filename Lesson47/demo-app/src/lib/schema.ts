@@ -9,7 +9,11 @@ export const sessionLengthSchema = z
 
 /** POST /api/quiz body: `{ topic, questionCount? }` */
 export const quizRequestSchema = z.object({
-  topic: z.string().trim().min(1, 'Topic is required.'),
+  topic: z
+    .string()
+    .trim()
+    .min(1, 'Topic is required.')
+    .max(50, 'Max 50 characters is allowed for the topic description.'),
   questionCount: sessionLengthSchema,
 });
 
