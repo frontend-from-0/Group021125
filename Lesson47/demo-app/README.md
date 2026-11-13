@@ -35,6 +35,26 @@ A micro-learning web app for learning anything—especially software development
 - Click **Next question** to continue (or **View results** on the last question).
 - On the results screen, review your score, strengths, and concepts to revisit. Use **Try again** for the same topic or **New topic** to start over.
 
+## Evals
+
+`evals/` checks the quiz generator against a fixed set of topics (normal, edge, and prompt-injection). It uses the same model, schema, instructions, and prompt as `/api/quiz`, but with non-streaming `generateText` + `Output.object`.
+
+```bash
+npm run eval
+```
+
+This loads `OPENAI_API_KEY` from `.env.local` (or the environment) and fails fast with a clear error if the key is missing. A full run costs a few cents with `gpt-4o-mini`.
+
+Each case checks that:
+
+- the response parses against the quiz schema
+- the number of questions matches the request
+- every question has 4 options and a `correctOptionId` of 0–3
+- an LLM judge marks the quiz as on-topic
+- prompt-injection cases do not leak the system prompt
+
+The script prints a per-case table and overall pass rate, and exits with code 1 if the pass rate is below 80%.
+
 ## Deploy
 
 Deploy to [Vercel](https://vercel.com) and set `OPENAI_API_KEY` in the project environment variables. Add `ANTHROPIC_API_KEY` and `PERPLEXITY_API_KEY` if you switch the quiz to Claude or Perplexity.

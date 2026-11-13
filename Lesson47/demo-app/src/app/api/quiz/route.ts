@@ -1,20 +1,22 @@
 import {
-  Output,
   createTextStreamResponse,
   streamText,
   toTextStream,
 } from 'ai';
 
-import { assertApiKeyConfigured, getOpenAIModel } from '@/lib/ai';
-import { SESSION_SYSTEM_PROMPT } from '@/lib/prompts';
-import { quizRequestSchema, quizResponseSchema } from '@/lib/schema';
+import { assertApiKeyConfigured } from '@/lib/ai';
+import { logQuizUsage, parseQuizOutput } from '@/lib/log-usage';
+import {
+  QUIZ_FUNCTION_ID,
+  createQuizGenerationSettings,
+} from '@/lib/quiz-generation';
+import { quizRequestSchema } from '@/lib/schema';
 
 export const maxDuration = 120;
 
-// Enough tokens for 15 questions with 4 options and explanations without truncating JSON.
-const QUIZ_MAX_OUTPUT_TOKENS = 6000;
-
 export async function POST(req: Request) {
+  const requestStartedAt = Date.now();
+
   try {
     assertApiKeyConfigured();
   } catch {
@@ -41,14 +43,33 @@ export async function POST(req: Request) {
   const { topic, questionCount } = parsed.data;
 
   const result = streamText({
-    model: getOpenAIModel(),
-    output: Output.object({ schema: quizResponseSchema }),
-    instructions: SESSION_SYSTEM_PROMPT,
-    prompt: `User topic: ${topic}\nGenerate exactly ${questionCount} questions.`,
+    ...createQuizGenerationSettings(topic, questionCount),
     abortSignal: req.signal,
-    maxOutputTokens: QUIZ_MAX_OUTPUT_TOKENS,
     onError: ({ error }) => {
       console.error(error);
+    },
+    // onFinish is a v7 alias of onEnd. It receives text, usage, finishReason, and model.
+    onFinish: ({ text, usage, finishReason, model }) => {
+      const parsedOutput = parseQuizOutput(text);
+
+      logQuizUsage({
+        event: 'quiz_generated',
+        functionId: QUIZ_FUNCTION_ID,
+        model: model.modelId,
+        topicLength: topic.length,
+        requestedQuestionCount: questionCount,
+        questionsReturned: parsedOutput.success
+          ? (parsedOutput.data.questions?.length ?? 0)
+          : 0,
+        usage: {
+          input: usage.inputTokens,
+          output: usage.outputTokens,
+          total: usage.totalTokens,
+        },
+        durationMs: Date.now() - requestStartedAt,
+        finishReason,
+        schemaValid: parsedOutput.success,
+      });
     },
   });
 
