@@ -31,6 +31,23 @@ const { text } = await generateText({
 - Support chat needs a session; do not expose a public OpenAI proxy.
 - Stripe and Prisma stay behind your APIs; the model never gets those keys.
 
+**In demo-app**
+
+- [route.ts](demo-app/src/app/api/quiz/route.ts) — server route; `assertApiKeyConfigured`.
+- [ai.ts](demo-app/src/lib/ai.ts) — `getOpenAIModel` reads `OPENAI_API_KEY` (not `NEXT_PUBLIC_*`).
+- [proxy.ts](demo-app/src/proxy.ts) — origin/referer check; not auth.
+
+```ts
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error('OPENAI_API_KEY is not configured');
+  }
+
+  const openai = createOpenAI({ apiKey });
+  return openai('gpt-4o-mini');
+}
+```
+
 - [Generate Text](https://ai-sdk.dev/resources/recipes/next/generate-text)
 - [OpenAI: API key safety](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety)
 
@@ -61,6 +78,20 @@ return createUIMessageStreamResponse({
 - Stream SEO meta or a translation so the admin can stop early (`AbortSignal`).
 - Stream a review summary or support answer; do not persist until the stream finishes.
 - Bulk import cleanup: stream per-row progress; cancel stops spend.
+
+**In demo-app**
+
+- [route.ts](demo-app/src/app/api/quiz/route.ts) — `streamText`, `createTextStreamResponse`, `abortSignal: req.signal`.
+- [QuizPage.tsx](demo-app/src/components/QuizPage.tsx) — `useObject`; Cancel calls `stop()`.
+
+```ts
+  const result = streamText({
+    ...createQuizGenerationSettings(topic, questionCount),
+    abortSignal: req.signal,
+    onError: ({ error }) => {
+      console.error(error);
+    },
+```
 
 - [Stream Text](https://ai-sdk.dev/resources/recipes/next/stream-text)
 - [Stream Text with Chat Prompt](https://ai-sdk.dev/resources/recipes/next/stream-text-with-chat-prompt)
@@ -93,6 +124,22 @@ const { output } = await generateText({
 - Image alt text and SEO meta as typed fields, not a Markdown blob.
 - Bulk import: structured rows (`sku`, `name`, `price`, `errors`) you can validate against Prisma.
 
+**In demo-app**
+
+- [quiz-generation.ts](demo-app/src/lib/quiz-generation.ts) — `Output.object({ schema: quizResponseSchema })`.
+- [schema.ts](demo-app/src/lib/schema.ts) — topic max 50; `correctOptionId` 0–3; questions max 15.
+- [session.ts](demo-app/src/lib/session.ts) — `isFlashcardReady` before scoring a partial card.
+
+```ts
+  return {
+    model: getOpenAIModel(),
+    output: Output.object({ schema: quizResponseSchema }),
+    instructions: SESSION_SYSTEM_PROMPT,
+    prompt: buildQuizPrompt(topic, questionCount),
+    maxOutputTokens: QUIZ_MAX_OUTPUT_TOKENS,
+  };
+```
+
 - [Generate Object](https://ai-sdk.dev/resources/recipes/next/generate-object)
 - [Stream Object](https://ai-sdk.dev/resources/recipes/next/stream-object)
 - [OpenAI: Structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs)
@@ -115,6 +162,8 @@ The model drafts. A person reviews, edits, and approves before anything is saved
 - Review moderation: the model flags; an admin publishes or removes.
 - Translations and alt text go live only after an admin approves.
 
+**In demo-app:** Not used in demo-app.
+
 - [Human-in-the-Loop with Next.js](https://ai-sdk.dev/resources/recipes/next/human-in-the-loop)
 - [OpenAI: Safety best practices](https://developers.openai.com/api/docs/guides/safety-best-practices)
 
@@ -135,6 +184,20 @@ Checks around the model: validate input, constrain output, never trust the text.
 - Do not render a generated description or a customer review as raw HTML.
 - Support chat: treat messages as untrusted; never leak another user’s order.
 - Description, moderation, and translation prompts stay on the server.
+
+**In demo-app**
+
+- [PromptView.tsx](demo-app/src/components/PromptView.tsx) — `maxLength={50}`; [schema.ts](demo-app/src/lib/schema.ts) topic `.max(50)`.
+- [quiz-generation.ts](demo-app/src/lib/quiz-generation.ts) — shared prompt; `maxOutputTokens`.
+- [QuizPage.tsx](demo-app/src/components/QuizPage.tsx) — generic error UI; not raw provider errors.
+
+```ts
+  topic: z
+    .string()
+    .trim()
+    .min(1, 'Topic is required.')
+    .max(50, 'Max 50 characters is allowed for the topic description.'),
+```
 
 - [Markdown Chatbot with Streamdown](https://ai-sdk.dev/resources/recipes/next/markdown-chatbot-with-memoization)
 - [OWASP GenAI LLM Top 10 2026](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/)
@@ -167,6 +230,8 @@ const { text } = await generateText({
 - Refund, discount, or “email the customer” tools: `needsApproval: true`.
 - Low-stock / sales insights: read-only tools; no auto-reorder and no price changes.
 
+**In demo-app:** Not used in demo-app.
+
 - [Call Tools](https://ai-sdk.dev/resources/recipes/next/call-tools)
 - [Call Tools in Multiple Steps](https://ai-sdk.dev/resources/recipes/next/call-tools-multiple-steps)
 - [streamText Multi-Step](https://ai-sdk.dev/resources/recipes/next/stream-text-multistep)
@@ -189,6 +254,8 @@ Retrieve relevant chunks from *your* data, then prompt the model with that conte
 - Semantic product search over embeddings of titles and descriptions.
 - Admin description draft: retrieve this product’s facts (and approved similar copy) first.
 - Support answers come from your policy docs, not from the model’s memory.
+
+**In demo-app:** Not used in demo-app.
 
 - [RAG Agent (Next.js guide)](https://ai-sdk.dev/resources/recipes/guides/rag-chatbot)
 - [Chat with PDFs](https://ai-sdk.dev/resources/recipes/next/chat-with-pdf)
@@ -213,6 +280,16 @@ Cap usage. Bound tokens. Do not pay twice for the same work.
 - Never cache one customer’s order-status answer as a global result.
 - Cache FAQ / return-policy chunks; do not cache unreviewed drafts as live copy.
 
+**In demo-app**
+
+- [quiz-generation.ts](demo-app/src/lib/quiz-generation.ts) — `QUIZ_MAX_OUTPUT_TOKENS`.
+- [schema.ts](demo-app/src/lib/schema.ts) — question count enum `5 | 10 | 15`.
+
+```ts
+// Enough tokens for 15 questions with 4 options and explanations without truncating JSON.
+export const QUIZ_MAX_OUTPUT_TOKENS = 6000;
+```
+
 - [Caching Middleware](https://ai-sdk.dev/resources/recipes/next/caching-middleware)
 - [Rate Limiting](https://ai-sdk.dev/docs/advanced/rate-limiting) (docs; no Next.js recipe)
 - [OpenAI: Rate limits](https://developers.openai.com/api/docs/guides/rate-limits)
@@ -233,6 +310,18 @@ Log what the model did (tokens, errors, prompt version). Test quality on a fixed
 - Small eval set of sample products: required schema fields present, no invented prices.
 - Trace support tool calls (order id, user id) and review-moderation decisions.
 - Re-run evals after prompt changes for descriptions, SEO, and translations.
+
+**In demo-app**
+
+- [route.ts](demo-app/src/app/api/quiz/route.ts) — `onFinish` calls `logQuizUsage`.
+- [log-usage.ts](demo-app/src/lib/log-usage.ts) — JSON usage log line.
+- [quiz.cases.ts](demo-app/evals/quiz.cases.ts) · [run-quiz-evals.ts](demo-app/evals/run-quiz-evals.ts) — `npm run eval`.
+
+```ts
+export function logQuizUsage(entry: QuizUsageLog): void {
+  console.log(JSON.stringify(entry));
+}
+```
 
 - [Track Agent Token Usage](https://ai-sdk.dev/resources/recipes/next/track-agent-token-usage)
 - [AI SDK: Telemetry](https://ai-sdk.dev/docs/ai-sdk-core/telemetry)
@@ -255,6 +344,21 @@ Call models through one interface (the AI SDK). Pick a model per task. Have a ba
 - Route cheaper models for category tags or moderation flags; a stronger model only if a long support answer needs it.
 - Do not fail over to a model that may call refund/discount tools if the primary cannot.
 - Centralise model ids for every ecom AI route (`/api/ai/products` and later alt text, translation, search).
+
+**In demo-app**
+
+- [ai.ts](demo-app/src/lib/ai.ts) — `getOpenAIModel`, `getClaudeModel`, `getPerplexityModel`.
+
+```ts
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error('ANTHROPIC_API_KEY is not configured');
+  }
+
+  const anthropic = createAnthropic({ apiKey });
+  return anthropic('claude-haiku-4-5');
+}
+```
 
 - [Generate Text](https://ai-sdk.dev/resources/recipes/next/generate-text)
 - [Azure: Application design for AI workloads](https://learn.microsoft.com/en-us/azure/well-architected/ai/application-design)
