@@ -41,7 +41,12 @@ export const flashcardSchema = z.object({
     ),
   question: z.string().describe('Scenario-based multiple-choice question.'),
   options: z.array(quizOptionSchema).length(4),
-  correctOptionId: z.number().describe('Id (0–3) of the correct option.'),
+  correctOptionId: z
+    .number()
+    .int()
+    .min(0)
+    .max(3)
+    .describe('Id (0–3) of the correct option.'),
 });
 
 /** Single object schema for OpenAI structured output (no discriminated union). */
@@ -75,6 +80,7 @@ export const quizResponseSchema = z.object({
     ),
   questions: z
     .array(flashcardSchema)
+    .max(15)
     .nullable()
     .describe(
       'When kind is session: exactly the requested number of flashcards, each with concept, question, options, correctOptionId.',
