@@ -11,6 +11,9 @@ import { quizRequestSchema, quizResponseSchema } from '@/lib/schema';
 
 export const maxDuration = 120;
 
+// Enough tokens for 15 questions with 4 options and explanations without truncating JSON.
+const QUIZ_MAX_OUTPUT_TOKENS = 6000;
+
 export async function POST(req: Request) {
   try {
     assertApiKeyConfigured();
@@ -42,6 +45,11 @@ export async function POST(req: Request) {
     output: Output.object({ schema: quizResponseSchema }),
     instructions: SESSION_SYSTEM_PROMPT,
     prompt: `User topic: ${topic}\nGenerate exactly ${questionCount} questions.`,
+    abortSignal: req.signal,
+    maxOutputTokens: QUIZ_MAX_OUTPUT_TOKENS,
+    onError: ({ error }) => {
+      console.error(error);
+    },
   });
 
   return createTextStreamResponse({

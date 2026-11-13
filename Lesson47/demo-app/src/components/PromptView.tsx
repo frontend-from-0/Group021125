@@ -55,6 +55,7 @@ export function PromptView({
             onChange={(event) => onTopicChange(event.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
+            maxLength={50}
             placeholder="e.g. React useEffect cleanup, SQL JOIN types, Docker multi-stage builds…"
             className="min-w-0 flex-1 bg-transparent font-mono text-terminal-fg outline-none placeholder:text-terminal-muted disabled:opacity-60"
           />

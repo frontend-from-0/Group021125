@@ -31,6 +31,9 @@ type SessionRequest = {
   questionCount: SessionLength;
 };
 
+const GENERATION_ERROR_MESSAGE =
+  'Something went wrong generating the quiz. Please try again.';
+
 function getOptionState(
   optionId: number,
   selectedOptionId: number | null,
@@ -78,10 +81,18 @@ export function QuizPage() {
   const [answers, setAnswers] = useState<SessionAnswer[]>([]);
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
   const [isLocked, setIsLocked] = useState(false);
+  const [generationError, setGenerationError] = useState<string | undefined>();
 
-  const { object, submit, isLoading, error, stop, clear } = useObject({
+  const { object, submit, isLoading, stop, clear } = useObject({
     api: '/api/quiz',
     schema: quizResponseSchema,
+    onError: (error) => {
+      if (error.name === 'AbortError') {
+        return;
+      }
+      setGenerationError(GENERATION_ERROR_MESSAGE);
+      setPhase('setup');
+    },
   });
 
   const session = object?.kind === 'session' ? object : undefined;
@@ -130,6 +141,7 @@ export function QuizPage() {
   }
 
   function beginSession(request: SessionRequest) {
+    setGenerationError(undefined);
     resetQuestionProgress();
     setPhase('generating');
     submit(request);
@@ -218,7 +230,6 @@ export function QuizPage() {
     correctOptionId != null &&
     selectedOptionId === correctOptionId;
 
-  const errorMessage = error?.message;
   const outlineItems = filterOutline(session?.outline ?? object?.outline);
   const showCardSkeleton = showSessionCard && !isCurrentCardReady;
 
@@ -241,8 +252,18 @@ export function QuizPage() {
             onQuestionCountChange={setQuestionCount}
             onSubmit={handleStartSession}
             isLoading={isLoading}
-            errorMessage={errorMessage}
+            errorMessage={generationError}
           />
+        ) : null}
+
+        {phase === 'generating' ? (
+          <button
+            type="button"
+            onClick={resetToSetup}
+            className="rounded-lg border border-terminal-border px-4 py-2 font-mono text-sm text-terminal-muted transition hover:border-terminal-accent/40 hover:text-terminal-fg"
+          >
+            Cancel
+          </button>
         ) : null}
 
         {showClarify && object.kind === 'clarify' ? (
