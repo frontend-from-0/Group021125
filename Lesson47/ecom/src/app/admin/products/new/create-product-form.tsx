@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, type ReactNode } from "react";
+import { useActionState, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Typography } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { generateProductDescription } from "@/lib/ai-client";
 import { ACCEPTED_IMAGE_ACCEPT_ATTR, MAX_IMAGE_MB } from "@/lib/product-images";
 import { Currency, EU_CURRENCY_OPTIONS } from "@/types/currency";
 import { PRODUCT_CATEGORY_OPTIONS, ProductCategory } from "@/types/product";
@@ -36,6 +37,29 @@ export function CreateProductForm() {
     CreateProductState | null,
     FormData
   >(createProduct, null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+
+  async function handleGenerateDescription() {
+    const title = nameRef.current?.value.trim() ?? "";
+    if (title.length < 2) {
+      setAiError("Enter a product name first.");
+      return;
+    }
+
+    setAiError(null);
+    setIsGenerating(true);
+    try {
+      const description = await generateProductDescription(title);
+      if (descriptionRef.current) descriptionRef.current.value = description;
+    } catch (error) {
+      setAiError(error instanceof Error ? error.message : "Could not generate a description.");
+    } finally {
+      setIsGenerating(false);
+    }
+  }
 
   const values = state && !state.success ? (state.values ?? initialValues) : initialValues;
   const fieldErrors = state && !state.success ? state.fieldErrors : undefined;
@@ -102,6 +126,7 @@ export function CreateProductForm() {
               name="name"
               defaultValue={values.name}
               placeholder="Running shoes"
+              ref={nameRef}
               aria-invalid={Boolean(fieldError(fieldErrors, "name"))}
             />
           </FormField>
@@ -116,8 +141,24 @@ export function CreateProductForm() {
               name="description"
               defaultValue={values.description}
               placeholder="Lightweight trainers for everyday runs."
+              ref={descriptionRef}
               aria-invalid={Boolean(fieldError(fieldErrors, "description"))}
             />
+            <div className="flex items-center gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleGenerateDescription}
+                disabled={isGenerating || isPending}
+              >
+                {isGenerating ? "Generating..." : "Generate description with AI"}
+              </Button>
+              {aiError ? (
+                <Typography as="span" variant="error">
+                  {aiError}
+                </Typography>
+              ) : null}
+            </div>
           </FormField>
 
           <FormField
