@@ -1,0 +1,393 @@
+{
+  "schemaVersion": "1",
+  "targetFamily": "mongo",
+  "target": "mongo",
+  "profileHash": "251b3ce23f6c9f561892e7c1af9d2cc941a13d64ba1aa7226b90036b09568cc3",
+  "roots": {
+    "transactions": {
+      "model": "Transaction",
+      "namespace": "__unbound__"
+    },
+    "users": {
+      "model": "User",
+      "namespace": "__unbound__"
+    }
+  },
+  "domain": {
+    "namespaces": {
+      "__unbound__": {
+        "enum": {
+          "Category": {
+            "codecId": "mongo/string@1",
+            "members": [
+              {
+                "name": "Allowance",
+                "value": "Allowance"
+              },
+              {
+                "name": "Gifts",
+                "value": "Gifts"
+              },
+              {
+                "name": "Food",
+                "value": "Food"
+              },
+              {
+                "name": "Games",
+                "value": "Games"
+              },
+              {
+                "name": "Savings",
+                "value": "Savings"
+              }
+            ]
+          },
+          "TransactionType": {
+            "codecId": "mongo/string@1",
+            "members": [
+              {
+                "name": "income",
+                "value": "income"
+              },
+              {
+                "name": "expense",
+                "value": "expense"
+              }
+            ]
+          }
+        },
+        "models": {
+          "Transaction": {
+            "fields": {
+              "amountCents": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/int32@1",
+                  "kind": "scalar"
+                }
+              },
+              "category": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/string@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "Category",
+                  "namespaceId": "__unbound__",
+                  "plane": "domain"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/date-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/objectId@1",
+                  "kind": "scalar"
+                }
+              },
+              "occurredAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/date-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "type": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/string@1",
+                  "kind": "scalar"
+                },
+                "valueSet": {
+                  "entityKind": "enum",
+                  "entityName": "TransactionType",
+                  "namespaceId": "__unbound__",
+                  "plane": "domain"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/date-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/objectId@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "user": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "__unbound__"
+                }
+              }
+            },
+            "storage": {
+              "collection": "transactions",
+              "fields": {
+                "amountCents": {
+                  "field": "amountCents"
+                },
+                "category": {
+                  "field": "category"
+                },
+                "createdAt": {
+                  "field": "createdAt"
+                },
+                "id": {
+                  "field": "_id"
+                },
+                "occurredAt": {
+                  "field": "occurredAt"
+                },
+                "type": {
+                  "field": "type"
+                },
+                "updatedAt": {
+                  "field": "updatedAt"
+                },
+                "userId": {
+                  "field": "userId"
+                }
+              }
+            }
+          },
+          "User": {
+            "fields": {
+              "auth0_id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/string@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/date-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/objectId@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "mongo/date-string@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "transactions": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "Transaction",
+                  "namespace": "__unbound__"
+                }
+              }
+            },
+            "storage": {
+              "collection": "users",
+              "fields": {
+                "auth0_id": {
+                  "field": "auth0_id"
+                },
+                "createdAt": {
+                  "field": "createdAt"
+                },
+                "id": {
+                  "field": "_id"
+                },
+                "updatedAt": {
+                  "field": "updatedAt"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "storage": {
+    "namespaces": {
+      "__unbound__": {
+        "entries": {
+          "collection": {
+            "transactions": {
+              "kind": "mongo-collection",
+              "validator": {
+                "jsonSchema": {
+                  "additionalProperties": false,
+                  "bsonType": "object",
+                  "properties": {
+                    "_id": {
+                      "bsonType": "objectId"
+                    },
+                    "amountCents": {
+                      "bsonType": "int"
+                    },
+                    "category": {
+                      "bsonType": "string",
+                      "enum": [
+                        "Allowance",
+                        "Gifts",
+                        "Food",
+                        "Games",
+                        "Savings"
+                      ]
+                    },
+                    "createdAt": {
+                      "bsonType": "date"
+                    },
+                    "occurredAt": {
+                      "bsonType": "date"
+                    },
+                    "type": {
+                      "bsonType": "string",
+                      "enum": [
+                        "income",
+                        "expense"
+                      ]
+                    },
+                    "updatedAt": {
+                      "bsonType": "date"
+                    },
+                    "userId": {
+                      "bsonType": "objectId"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "amountCents",
+                    "category",
+                    "createdAt",
+                    "occurredAt",
+                    "type",
+                    "updatedAt",
+                    "userId"
+                  ]
+                },
+                "kind": "mongo-validator",
+                "validationAction": "error",
+                "validationLevel": "strict"
+              }
+            },
+            "users": {
+              "indexes": [
+                {
+                  "keys": [
+                    {
+                      "direction": 1,
+                      "field": "auth0_id"
+                    }
+                  ],
+                  "kind": "mongo-index",
+                  "name": "auth0_id_1",
+                  "unique": true
+                }
+              ],
+              "kind": "mongo-collection",
+              "validator": {
+                "jsonSchema": {
+                  "additionalProperties": false,
+                  "bsonType": "object",
+                  "properties": {
+                    "_id": {
+                      "bsonType": "objectId"
+                    },
+                    "auth0_id": {
+                      "bsonType": "string"
+                    },
+                    "createdAt": {
+                      "bsonType": "date"
+                    },
+                    "updatedAt": {
+                      "bsonType": "date"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "auth0_id",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                },
+                "kind": "mongo-validator",
+                "validationAction": "error",
+                "validationLevel": "strict"
+              }
+            }
+          },
+          "valueSet": {
+            "Category": {
+              "kind": "valueSet",
+              "values": [
+                "Allowance",
+                "Gifts",
+                "Food",
+                "Games",
+                "Savings"
+              ]
+            },
+            "TransactionType": {
+              "kind": "valueSet",
+              "values": [
+                "income",
+                "expense"
+              ]
+            }
+          }
+        },
+        "id": "__unbound__",
+        "kind": "mongo-database"
+      }
+    },
+    "storageHash": "e533d5a9d3c725dc7b9b0ad43933914984c248574bdbed2c82fe64e10f6fec09"
+  },
+  "capabilities": {},
+  "extensions": {},
+  "meta": {},
+  "_generated": {
+    "warning": "⚠️  GENERATED FILE - DO NOT EDIT",
+    "message": "This file is automatically generated by \"prisma contract emit\".",
+    "regenerate": "To regenerate, run: prisma contract emit"
+  }
+}

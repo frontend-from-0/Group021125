@@ -1,0 +1,38 @@
+// use prisma-8
+
+enum TransactionType {
+  income
+  expense
+}
+
+enum Category {
+  Allowance
+  Gifts
+  Food
+  Games
+  Savings
+}
+
+model User {
+  id           ObjectId      @id @map("_id")
+  auth0_id     String        @unique
+  createdAt    Date
+  updatedAt    Date
+  transactions Transaction[]
+
+  @@map("users")
+}
+
+model Transaction {
+  id          ObjectId        @id @map("_id")
+  userId      ObjectId
+  user        User            @relation(fields: [userId], references: [id])
+  type        TransactionType
+  amountCents Int32
+  category    Category
+  occurredAt  Date
+  createdAt   Date
+  updatedAt   Date
+
+  @@map("transactions")
+}
